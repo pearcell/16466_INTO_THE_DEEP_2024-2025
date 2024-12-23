@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+/*import com.qualcomm.robotcore.hardware.DistanceSensor;*/
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp
 public class FieldCentric extends LinearOpMode {
     double tgtPower = 0;
-    DistanceSensor dsensor;
+    /*DistanceSensor dsensor;*/
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -31,20 +31,22 @@ public class FieldCentric extends LinearOpMode {
         DcMotor backLift = hardwareMap.dcMotor.get("backLift");
         Servo servoArm = hardwareMap.servo.get("ServoArm");
         Servo servoClaw = hardwareMap.servo.get("ServoClaw");
-        dsensor = hardwareMap.get(DistanceSensor.class,  "distance sensor");
+        IMU imu = hardwareMap.get(IMU.class, "imu");
+        /*dsensor = hardwareMap.get(DistanceSensor.class,  "distance sensor");
+        */
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
         frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
         backLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
         backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
-        double value = dsensor.getDistance(DistanceUnit.INCH);
-        IMU imu = hardwareMap.get(IMU.class, "imu");
+        /*double value = dsensor.getDistance(DistanceUnit.INCH);*/
+
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -54,9 +56,9 @@ public class FieldCentric extends LinearOpMode {
 
         waitForStart();
 
-        if (value > 5 && value <= 10)
+       /* if (value > 5 && value <= 10)
         {
-        }
+        }*/
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
@@ -74,7 +76,7 @@ public class FieldCentric extends LinearOpMode {
             double angleNormalized = angle % 360;
 
             if (gamepad1.a) {
-                frontLift.setPower(0.5);
+                frontLift.setPower(-0.5);
                 backLift.setPower(0.5);}
             else if (backLift.getCurrentPosition() == 1000) {
                 frontLift.setPower(0);
@@ -84,7 +86,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);}
 
             if (gamepad1.left_bumper) {
-                frontLift.setPower(0.5);
+                frontLift.setPower(-0.5);
                 backLift.setPower(0.5);}
             else if (backLift.getCurrentPosition() == 900) {
                 frontLift.setPower(0);
@@ -130,7 +132,7 @@ public class FieldCentric extends LinearOpMode {
                     double frontRightPower = (rotY - rotX - rx) / denominator;
                     double backRightPower = (rotY + rotX - rx) / denominator;
                     if (gamepad1.right_bumper){
-                        frontLift.setPower(1);
+                        frontLift.setPower(-1);
                         backLift.setPower(1);
                     } else{
                         frontLift.setPower(0);
@@ -145,7 +147,7 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Encoder Revolutions", revolutions);
             telemetry.addData("Encoder Angle (Degrees)", angle);
             telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
-            telemetry.addData("Distance Sensor", dsensor);
+            /*telemetry.addData("Distance Sensor", dsensor);*/
             telemetry.update();
                 }
             }
