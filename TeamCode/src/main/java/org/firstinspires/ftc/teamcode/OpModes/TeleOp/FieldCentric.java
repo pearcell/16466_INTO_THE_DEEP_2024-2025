@@ -53,7 +53,7 @@ public class FieldCentric extends LinearOpMode {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
-
+        imu.resetYaw();
         waitForStart();
 
        /* if (value > 5 && value <= 10)
@@ -98,7 +98,7 @@ public class FieldCentric extends LinearOpMode {
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.options) {
+            if (gamepad1.start) {
                 imu.resetYaw();
             }
             if (gamepad1.a) {
@@ -121,7 +121,7 @@ public class FieldCentric extends LinearOpMode {
                     double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
                     double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-                    rotX = rotX * 1.1;  // Counteract imperfect strafing
+                    rotX = rotX * 1;  // Counteract imperfect strafing
 
                     // Denominator is the largest motor power (absolute value) or 1
                     // This ensures all the powers maintain the same ratio,
@@ -143,6 +143,7 @@ public class FieldCentric extends LinearOpMode {
                     backLeftMotor.setPower(backLeftPower);
                     frontRightMotor.setPower(frontRightPower);
                     backRightMotor.setPower(backRightPower);
+            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.addData("Encoder Position", position);
             telemetry.addData("Encoder Revolutions", revolutions);
             telemetry.addData("Encoder Angle (Degrees)", angle);

@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOp.Tests;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -24,12 +26,26 @@ public class OdoYawTest extends LinearOpMode {
     int currentLeftPosition = 0;
 
     double heading = 0;
+
     @Override
     public void runOpMode() {
         leftPod = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         rightPod = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
 
+        leftPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         imu = hardwareMap.get(IMU.class, "imu");
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        )
+                )
+        );
+        imu.resetYaw();
 
         waitForStart();
 
@@ -44,7 +60,7 @@ public class OdoYawTest extends LinearOpMode {
             int dn2 = currentRightPosition - oldRightPosition;
 
             double dTheta = cmPerTick * ((dn2-dn1) / (trackWidth));
-            heading += dTheta;
+            heading += dTheta * 180/Math.PI;
 
             telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.addData("heading", heading);
