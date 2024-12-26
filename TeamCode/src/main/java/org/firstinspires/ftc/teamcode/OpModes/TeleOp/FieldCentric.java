@@ -17,6 +17,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp
 public class FieldCentric extends LinearOpMode {
     double tgtPower = 0;
+
+    double oldHeading = 0;
+    double currentHeading = 0;
+
     /*DistanceSensor dsensor;*/
     @Override
     public void runOpMode() throws InterruptedException {
@@ -54,20 +58,50 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
+
         waitForStart();
 
-       /* if (value > 5 && value <= 10)
+        /* if (value > 5 && value <= 10)
         {
         }*/
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
+
+            oldHeading = currentHeading;
+            
+            if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0){
+                imu.initialize(parameters);
+            } else {
+                imu.resetYaw();
+            }
+
+            currentHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + oldHeading;
+            
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
             tgtPower = -this.gamepad1.left_stick_y;
 
+            // Rotate the movement direction counter to the bot's rotation
+            double rotX = x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading);
+            double rotY = x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading);
 
+            rotX = rotX * 1;  // Counteract imperfect strafing
+
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio,
+            // but only if at least one is out of the range [-1, 1]
+            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+            double frontLeftPower = (rotY + rotX + rx) / denominator;
+            double backLeftPower = (rotY - rotX + rx) / denominator;
+            double frontRightPower = (rotY - rotX - rx) / denominator;
+            double backRightPower = (rotY + rotX - rx) / denominator;
+
+            frontLeftMotor.setPower(frontLeftPower);
+            backLeftMotor.setPower(backLeftPower);
+            frontRightMotor.setPower(frontRightPower);
+            backRightMotor.setPower(backRightPower);
 
             int position = backLift.getCurrentPosition();
             double revolutions = position;
@@ -77,23 +111,25 @@ public class FieldCentric extends LinearOpMode {
 
             if (gamepad1.a) {
                 frontLift.setPower(-0.5);
-                backLift.setPower(0.5);}
-            else if (backLift.getCurrentPosition() == 1000) {
+                backLift.setPower(0.5);
+            } else if (backLift.getCurrentPosition() == 1000) {
                 frontLift.setPower(0);
-                backLift.setPower(0);}
-            else if (frontLift.getCurrentPosition() == 1000) {
+                backLift.setPower(0);
+            } else if (frontLift.getCurrentPosition() == 1000) {
                 frontLift.setPower(0);
-                backLift.setPower(0);}
+                backLift.setPower(0);
+            }
 
             if (gamepad1.left_bumper) {
                 frontLift.setPower(-0.5);
-                backLift.setPower(0.5);}
-            else if (backLift.getCurrentPosition() == 900) {
+                backLift.setPower(0.5);
+            } else if (backLift.getCurrentPosition() == 900) {
                 frontLift.setPower(0);
-                backLift.setPower(0);}
-            else if (frontLift.getCurrentPosition() == 900) {
+                backLift.setPower(0);
+            } else if (frontLift.getCurrentPosition() == 900) {
                 frontLift.setPower(0);
-                backLift.setPower(0);}
+                backLift.setPower(0);
+            }
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
@@ -101,6 +137,7 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad1.start) {
                 imu.resetYaw();
             }
+
             if (gamepad1.a) {
                 // move to 0 degrees.
                 servoClaw.setPosition(0);
@@ -108,47 +145,31 @@ public class FieldCentric extends LinearOpMode {
                 // move to 90 degrees.
                 servoClaw.setPosition(0.5);
             }
-                if (gamepad1.dpad_up) {
-                    // move to 0 degrees.
-                    servoArm.setPosition(0);
-                } else if (gamepad1.dpad_down) {
-                    // move to 90 degrees.
-                    servoArm.setPosition(0.5);
-                }
-                    double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-                    // Rotate the movement direction counter to the bot's rotation
-                    double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-                    double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+            if (gamepad1.dpad_up) {
+                // move to 0 degrees.
+                servoArm.setPosition(0);
+            } else if (gamepad1.dpad_down) {
+                // move to 90 degrees.
+                servoArm.setPosition(0.5);
+            }
 
-                    rotX = rotX * 1;  // Counteract imperfect strafing
 
-                    // Denominator is the largest motor power (absolute value) or 1
-                    // This ensures all the powers maintain the same ratio,
-                    // but only if at least one is out of the range [-1, 1]
-                    double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-                    double frontLeftPower = (rotY + rotX + rx) / denominator;
-                    double backLeftPower = (rotY - rotX + rx) / denominator;
-                    double frontRightPower = (rotY - rotX - rx) / denominator;
-                    double backRightPower = (rotY + rotX - rx) / denominator;
-                    if (gamepad1.right_bumper){
-                        frontLift.setPower(-1);
-                        backLift.setPower(1);
-                    } else{
-                        frontLift.setPower(0);
-                        backLift.setPower(0);
-                    }
+            if (gamepad1.right_bumper){
+                frontLift.setPower(-1);
+                backLift.setPower(1);
+            } else {
+                frontLift.setPower(0);
+                backLift.setPower(0);
+            }
 
-                    frontLeftMotor.setPower(frontLeftPower);
-                    backLeftMotor.setPower(backLeftPower);
-                    frontRightMotor.setPower(frontRightPower);
-                    backRightMotor.setPower(backRightPower);
             telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.addData("Encoder Position", position);
             telemetry.addData("Encoder Revolutions", revolutions);
             telemetry.addData("Encoder Angle (Degrees)", angle);
             telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
             /*telemetry.addData("Distance Sensor", dsensor);*/
+
             telemetry.update();
                 }
             }
