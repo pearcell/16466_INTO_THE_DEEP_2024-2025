@@ -18,9 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class FieldCentric extends LinearOpMode {
     double tgtPower = 0;
 
-    double oldHeading = 0;
-    double currentHeading = 0;
-
+    double botHeading = 0;
     /*DistanceSensor dsensor;*/
     @Override
     public void runOpMode() throws InterruptedException {
@@ -67,16 +65,12 @@ public class FieldCentric extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-
-            oldHeading = currentHeading;
             
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0){
                 imu.initialize(parameters);
-            } else {
-                imu.resetYaw();
             }
 
-            currentHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + oldHeading;
+            botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
@@ -84,8 +78,8 @@ public class FieldCentric extends LinearOpMode {
             tgtPower = -this.gamepad1.left_stick_y;
 
             // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading);
-            double rotY = x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading);
+            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
             rotX = rotX * 1;  // Counteract imperfect strafing
 
@@ -163,7 +157,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);
             }
 
-            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
             telemetry.addData("Encoder Position", position);
             telemetry.addData("Encoder Revolutions", revolutions);
             telemetry.addData("Encoder Angle (Degrees)", angle);

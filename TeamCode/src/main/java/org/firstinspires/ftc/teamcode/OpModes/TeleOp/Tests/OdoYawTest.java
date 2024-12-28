@@ -19,7 +19,7 @@ public class OdoYawTest extends LinearOpMode {
 
     double trackWidth = 26.35;
     double ticksPerRev = 2000;
-    double cmPerTick = (2 * Math.PI * 24) / ticksPerRev;
+    double cmPerTick = (2 * Math.PI * 2.4) / ticksPerRev;
     int oldRightPosition;
     int oldLeftPosition;
     int currentRightPosition = 0;
@@ -53,16 +53,18 @@ public class OdoYawTest extends LinearOpMode {
             oldRightPosition = currentRightPosition;
             oldLeftPosition = currentLeftPosition;
 
-            currentRightPosition = rightPod.getCurrentPosition();
-            currentLeftPosition = -leftPod.getCurrentPosition();
+            currentRightPosition = -rightPod.getCurrentPosition();
+            currentLeftPosition = leftPod.getCurrentPosition();
 
             int dn1 = currentLeftPosition  - oldLeftPosition;
             int dn2 = currentRightPosition - oldRightPosition;
 
             double dTheta = cmPerTick * ((dn2-dn1) / (trackWidth));
-            heading += dTheta * 180/Math.PI;
+            heading += dTheta;
 
-            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("rightPod", rightPod.getCurrentPosition());
+            telemetry.addData("leftPod", leftPod.getCurrentPosition());
+            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
             telemetry.addData("heading", heading);
             telemetry.update();
         }
