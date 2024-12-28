@@ -19,15 +19,10 @@ public class Claw {
     }
 
     public class Grab implements Action {
-        private boolean initialized = false;
-
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                clawServo.setPosition(closedPos);
-                initialized = true;
-            }
-            return clawServo.getPosition() < closedPos;
+            clawServo.setPosition(closedPos);
+            return false;
         }
     }
 
@@ -36,15 +31,10 @@ public class Claw {
     }
 
     public class Drop implements Action {
-        private boolean initialized = false;
-
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                clawServo.setPosition(openPos);
-                initialized = true;
-            }
-            return clawServo.getPosition() < openPos;
+            clawServo.setPosition(openPos);
+            return false;
         }
     }
 

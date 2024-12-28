@@ -29,7 +29,17 @@ public class VerticalLift {
                 initialized = true;
             }
 
-            return leftLift.getCurrentPosition() < top || rightLift.getCurrentPosition() < top;
+            double posLeft = leftLift.getCurrentPosition();
+            double posRight = rightLift.getCurrentPosition();
+
+            if (posLeft < top || posRight < top) {
+                return true;
+            } else {
+                leftLift.setPower(0);
+                rightLift.setPower(0);
+                return false;
+            }
+
         }
     }
 
@@ -48,7 +58,21 @@ public class VerticalLift {
                 initialized = true;
             }
 
-            return leftLift.getCurrentPosition() > bottom || rightLift.getCurrentPosition() > bottom;
+            double posLeft = leftLift.getCurrentPosition();
+            double posRight = rightLift.getCurrentPosition();
+
+            if (posLeft > bottom || posRight > bottom) {
+                return true;
+            } else {
+                leftLift.setPower(0);
+                rightLift.setPower(0);
+                return false;
+            }
         }
     }
+
+    public Action lower() {
+        return new Lower();
+    }
+
 }
