@@ -24,9 +24,16 @@ public class MeepMeepTesting {
                 .splineToConstantHeading(new Vector2d(-35.5, 0), Math.toRadians(-90))
                 .setReversed(false)
                 .splineToConstantHeading(new Vector2d(-45, 0), Math.toRadians(90))
-                .setTangent(Math.toRadians(90))
+                .lineToY(50)
+                /*.setTangent(Math.toRadians(90))
                 .setReversed(true)
-                .splineTo(new Vector2d(-45, 50), Math.toRadians(90))
+                .splineTo(new Vector2d(-45, 50), Math.toRadians(90))*/
+                .setTangent(Math.toRadians(90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-45, 0), Math.toRadians(-135))
+                
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-55, 50), Math.toRadians(90))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_OFFICIAL)
