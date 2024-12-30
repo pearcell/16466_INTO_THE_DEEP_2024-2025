@@ -49,6 +49,8 @@ public class RobotCentric extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
+
+
             if (gamepad1.a) {
                 // move to 0 degrees.
                 servoClaw.setPosition(0);
@@ -69,7 +71,7 @@ public class RobotCentric extends LinearOpMode {
                 frontRightMotor.setPower(frontRightMotor.getPower());
                 backRightMotor.setPower(backRightMotor.getPower());
                 if (gamepad1.right_bumper) {
-                    frontLift.setPower(1);
+                    frontLift.setPower(-1);
                     backLift.setPower(1);
                 } else{
                     frontLift.setPower(0);

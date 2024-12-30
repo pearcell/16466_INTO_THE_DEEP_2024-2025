@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * See the sensor's product page: https://www.revrobotics.com/rev-31-1505/
  */
 @TeleOp(name = "Sensor: REV2mDistance", group = "Sensor")
-@Disabled
+
 public class SensorREV2mDistance extends LinearOpMode {
 
     private DistanceSensor sensorDistance;
@@ -71,9 +71,6 @@ public class SensorREV2mDistance extends LinearOpMode {
         while(opModeIsActive()) {
             // generic DistanceSensor methods.
             telemetry.addData("deviceName", sensorDistance.getDeviceName() );
-            telemetry.addData("range", String.format("%.01f mm", sensorDistance.getDistance(DistanceUnit.MM)));
-            telemetry.addData("range", String.format("%.01f cm", sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("range", String.format("%.01f m", sensorDistance.getDistance(DistanceUnit.METER)));
             telemetry.addData("range", String.format("%.01f in", sensorDistance.getDistance(DistanceUnit.INCH)));
 
             // Rev2mDistanceSensor specific methods.
