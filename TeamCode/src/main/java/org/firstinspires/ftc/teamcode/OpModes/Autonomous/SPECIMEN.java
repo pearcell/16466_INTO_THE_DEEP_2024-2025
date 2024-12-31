@@ -48,6 +48,9 @@ public class SPECIMEN extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-60, 0), Math.toRadians(90))
                 .lineToY(55);
 
+
+        //don't forget to run grab() action during init to maintain possession of specimen
+
         waitForStart();
 
         if (isStopRequested()) return;
