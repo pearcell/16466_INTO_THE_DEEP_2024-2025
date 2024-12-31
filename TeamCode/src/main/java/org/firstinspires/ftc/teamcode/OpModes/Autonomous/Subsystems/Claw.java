@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -31,14 +32,24 @@ public class Claw {
     }
 
     public class Drop implements Action {
+        DcMotorEx motorL;
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            clawServo.setPosition(openPos);
-            return false;
+            if (motorL.getCurrentPosition() <= 1000) {
+                clawServo.setPosition(openPos);
+                return false;
+            }
+            return true;
+        }
+
+        public Drop(DcMotorEx motor) {
+            motorL = motor;
         }
     }
 
-    public Action drop() {
-        return new Drop();
+
+
+    public Action drop(DcMotorEx motor) {
+        return new Drop(motor);
     }
 }
