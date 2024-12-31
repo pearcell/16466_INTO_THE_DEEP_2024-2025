@@ -10,19 +10,15 @@ public class armTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Servo servoArm = hardwareMap.servo.get("servoArm");
         servoArm.setPosition(.5);
-        double rest = 0.8;
-        double out = 0.5;
-        waitForStart();
-        while (opModeIsActive()) {
-       /* Gamepad currentGamepad1 = new Gamepad();
+
+        Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
 
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
-        Servo servoArm = hardwareMap.servo.get("servoArm");
         waitForStart();
-        double closed = 0.15;
-        double open = 0;
+        double rest = 0.8;
+        double out = 0.5;
         double armclickcount = 0;
         if (isStopRequested()) return;
         while (opModeIsActive()) {
@@ -32,18 +28,18 @@ public class armTest extends LinearOpMode {
             currentGamepad2.copy(gamepad2);
             if (currentGamepad1.x && !previousGamepad1.x) {
                 if (armclickcount % 2 == 1) {
-                    servoArm.setPosition(open);
+                    servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
 
                 } else if (armclickcount % 2 == 0) {
-                    servoArm.setPosition(closed);
-                    armclickcount = armclickcount + 1;*/
+                    servoArm.setPosition(rest);
+                    armclickcount = armclickcount + 1;
 
-            telemetry.addData("Claw Position", servoArm.getPosition());
-            /* telemetry.addData("Click Count", armclickcount);*/
-            telemetry.update();
+                    telemetry.addData("Claw Position", servoArm.getPosition());
+                    /* telemetry.addData("Click Count", armclickcount);*/
+                    telemetry.update();
+                }
+            }
         }
     }
 }
-
-
