@@ -30,11 +30,11 @@ public class clawTest extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
             if (currentGamepad1.b && !previousGamepad1.b) {
-                if ( clickcount%2 == 1) {
+                if ( clickcount % 2 == 1) {
                     servoClaw.setPosition(open);
                     clickcount = clickcount + 1;
 
-                } else if( clickcount%2 == 0) {
+                } else if( clickcount % 2 == 0) {
                     servoClaw.setPosition(closed);
                     clickcount = clickcount + 1;
                 }

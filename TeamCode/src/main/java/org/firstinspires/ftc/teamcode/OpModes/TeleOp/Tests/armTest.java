@@ -9,7 +9,8 @@ public class armTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Servo servoArm = hardwareMap.servo.get("servoArm");
-        servoArm.setPosition(.5);
+
+
 
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
@@ -17,8 +18,8 @@ public class armTest extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
         waitForStart();
-        double rest = 0.8;
-        double out = 0.5;
+        double rest = 0.5;
+        double out = 0.2;
         double armclickcount = 0;
         if (isStopRequested()) return;
         while (opModeIsActive()) {
@@ -34,11 +35,11 @@ public class armTest extends LinearOpMode {
                 } else if (armclickcount % 2 == 0) {
                     servoArm.setPosition(rest);
                     armclickcount = armclickcount + 1;
-
-                    telemetry.addData("Claw Position", servoArm.getPosition());
-                    /* telemetry.addData("Click Count", armclickcount);*/
-                    telemetry.update();
                 }
+                    telemetry.addData("Arm Position", servoArm.getPosition());
+                     telemetry.addData("Arm Click Count", armclickcount);
+                    telemetry.update();
+
             }
         }
     }
