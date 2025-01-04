@@ -103,11 +103,11 @@ public class FieldCentric extends LinearOpMode {
         double armclickcount = 0;
 
         int upperBasket = 10000;
-        int lowerBasket = 8000;
+        /*int lowerBasket = 8000;
         int upperBar = 9000;
         int lowerBar = 7000;
         int scoreRange = 200;
-        /*double distance = 2.5;
+        double distance = 2.5;
 
         ArrayList<Integer> integerList = new ArrayList<>();
         integerList.add(upperBasket);
@@ -179,34 +179,17 @@ public class FieldCentric extends LinearOpMode {
              }  while (frontLift.isBusy()) {
              }*/
 // down
-            if (gamepad1.left_trigger > 0) {
+            if (gamepad1.left_trigger > 0 && digitalTouch.getState() == false ) {
                 frontLift.setPower(gamepad1.left_trigger);
                 backLift.setPower(-gamepad1.left_trigger);
-            }
-            if (backLift.getCurrentPosition() > upperBasket || frontLift.getCurrentPosition() > upperBasket) {
-                frontLift.setPower(0);
-                backLift.setPower(0);
-            } else if  (backLift.getCurrentPosition() == upperBar || frontLift.getCurrentPosition() == upperBar) {
-                frontLift.setPower(0);
-                backLift.setPower(0);
-            } else if (backLift.getCurrentPosition() == lowerBasket || frontLift.getCurrentPosition() == lowerBasket) {
-                frontLift.setPower(0);
-                backLift.setPower(0);
-            } else if (backLift.getCurrentPosition() == lowerBar || frontLift.getCurrentPosition() == lowerBar) {
-                frontLift.setPower(0);
-                backLift.setPower(0);
-            } else if (backLift.getCurrentPosition() == scoreRange || frontLift.getCurrentPosition() == scoreRange) {
-                frontLift.setPower(0);
-                backLift.setPower(0);
             }
 
 
 // up
-                if (gamepad1.right_trigger > 0) {
+                if (gamepad1.right_trigger > 0 && frontLift.getCurrentPosition() < upperBasket) {
                     frontLift.setPower(-gamepad1.right_trigger);
                     backLift.setPower(gamepad1.right_trigger);
                 }
-
 
                 // This button choice was made so that it is hard to hit on accident,
                 // it can be freely changed based on preference.
@@ -221,7 +204,7 @@ public class FieldCentric extends LinearOpMode {
                 currentGamepad1.copy(gamepad1);
                 currentGamepad2.copy(gamepad2);
                 if (currentGamepad1.b && !previousGamepad1.b) {
-                    if (clawclickcount % 2 == 1) {
+                    if (clawclickcount % 2 == 1 ) {
                         servoClaw.setPosition(open);
                         clawclickcount = clawclickcount + 1;
 
@@ -231,11 +214,11 @@ public class FieldCentric extends LinearOpMode {
                     }
                 }
                 if (currentGamepad1.x && !previousGamepad1.x) {
-                    if (armclickcount % 2 == 1) {
+                    if (armclickcount % 2 == 1 && digitalTouch.getState() == false) {
                         servoArm.setPosition(out);
                         armclickcount = armclickcount + 1;
 
-                    } else if (armclickcount % 2 == 0) {
+                    } else if (armclickcount % 2 == 0 && digitalTouch.getState() == false) {
                         servoArm.setPosition(rest);
                         armclickcount = armclickcount + 1;
                     }
