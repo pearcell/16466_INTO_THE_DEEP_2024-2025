@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class VerticalLift {
     public DcMotorEx leftLift;
     private DcMotorEx rightLift;
-    int top = 1000;
-    int bottom = 0;
 
     public VerticalLift(HardwareMap hardwareMap) {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
@@ -20,6 +18,11 @@ public class VerticalLift {
 
     public class Raise implements Action {
         private boolean initialized = false;
+        private int encoderVal;
+
+        public Raise(int encVal) {
+            encoderVal = encVal;
+        }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -32,23 +35,27 @@ public class VerticalLift {
             double posLeft = leftLift.getCurrentPosition();
             double posRight = rightLift.getCurrentPosition();
 
-            if (posLeft < top || posRight < top) {
+            if (posLeft < encoderVal || posRight < encoderVal) {
                 return true;
             } else {
                 leftLift.setPower(0);
                 rightLift.setPower(0);
                 return false;
             }
-
         }
     }
 
-    public Action raise() {
-        return new Raise();
+    public Action raise(int encVal1) {
+        return new Raise(encVal1);
     }
 
     public class Lower implements Action {
         private boolean initialized = false;
+        private int encoderValue;
+
+        public Lower(int encVal) {
+            encoderValue = encVal;
+        }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -61,7 +68,7 @@ public class VerticalLift {
             double posLeft = leftLift.getCurrentPosition();
             double posRight = rightLift.getCurrentPosition();
 
-            if (posLeft > bottom || posRight > bottom) {
+            if (posLeft > encoderValue || posRight > encoderValue) {
                 return true;
             } else {
                 leftLift.setPower(0);
@@ -71,8 +78,8 @@ public class VerticalLift {
         }
     }
 
-    public Action lower() {
-        return new Lower();
+    public Action lower(int encVal1) {
+        return new Lower(encVal1);
     }
 
 }
