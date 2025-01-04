@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
 
 
@@ -22,6 +23,7 @@ public class SAMPLE extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
+        HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
     //initialize trajectories
         //default path to return to basket
@@ -48,13 +50,72 @@ public class SAMPLE extends LinearOpMode {
 
 
         //don't forget to run grab() action during init to maintain possession of sample
+        Actions.runBlocking(claw.grab());
 
         waitForStart();
 
         if (isStopRequested()) return;
 
         //Code
-        Actions.runBlocking(score.build());
-
+        Actions.runBlocking(
+                new SequentialAction(
+                        //score block 1
+                        new ParallelAction(
+                                score.build(),
+                                lift.raise(1000),
+                                claw.drop(lift.leftLift, 1500)
+                        ),
+                        //score block 2
+                        new ParallelAction(
+                                grab1.build(),
+                                lift.lower(0),
+                                intake.extend(lift.leftLift, 50)
+                        ),
+                        new ParallelAction(
+                                claw.grab(),
+                                intake.retract()
+                        ),
+                        new ParallelAction(
+                                score.build(),
+                                lift.raise(1000),
+                                claw.drop(lift.leftLift, 1500)
+                        ),
+                        //score block 3
+                        new ParallelAction(
+                                grab2.build(),
+                                lift.lower(0),
+                                intake.extend(lift.leftLift, 50)
+                        ),
+                        new ParallelAction(
+                                claw.grab(),
+                                intake.retract()
+                        ),
+                        new ParallelAction(
+                                score.build(),
+                                lift.raise(1000),
+                                claw.drop(lift.leftLift, 1500)
+                        ),
+                        //score block 4
+                        new ParallelAction(
+                                grab3.build(),
+                                lift.lower(0),
+                                intake.extend(lift.leftLift, 50)
+                        ),
+                        new ParallelAction(
+                                claw.grab(),
+                                intake.retract()
+                        ),
+                        new ParallelAction(
+                                score.build(),
+                                lift.raise(1000),
+                                claw.drop(lift.leftLift, 1500)
+                        ),
+                        //score park
+                        new ParallelAction(
+                                park.build(),
+                                lift.lower(400)
+                        )
+                )
+        );
     }
 }

@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class Claw {
     private Servo clawServo;
     private int openPos;
@@ -32,24 +30,27 @@ public class Claw {
     }
 
     public class Drop implements Action {
-        DcMotorEx motorL;
+        private DcMotorEx motorL;
+        private int encoderValue;
+
+        public Drop(DcMotorEx motor, int encB) {
+            motorL = motor;
+            encoderValue = encB;
+        }
+
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (motorL.getCurrentPosition() <= 1000) {
+            if (motorL.getCurrentPosition() >= encoderValue) {
                 clawServo.setPosition(openPos);
                 return false;
             }
             return true;
         }
-
-        public Drop(DcMotorEx motor) {
-            motorL = motor;
-        }
     }
 
 
 
-    public Action drop(DcMotorEx motor) {
-        return new Drop(motor);
+    public Action drop(DcMotorEx motor, int encA) {
+        return new Drop(motor, encA);
     }
 }

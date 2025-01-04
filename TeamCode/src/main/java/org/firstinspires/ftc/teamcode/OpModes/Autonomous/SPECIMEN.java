@@ -50,29 +50,29 @@ public class SPECIMEN extends LinearOpMode {
 
 
         //don't forget to run grab() action during init to maintain possession of specimen
+        Actions.runBlocking(claw.grab());
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        //Code
-        Actions.runBlocking(
-            new SequentialAction(
-        new ParallelAction(
-                    path1.build(), //move to chamber
-                    lift.raise()
-                ),
-                new ParallelAction(
-            lift.lower(),
+        while (opModeIsActive()) {
+            //Code
+            Actions.runBlocking(
                     new SequentialAction(
-                        new SleepAction(0),
-                        claw.drop(lift.leftLift)
+                            new ParallelAction(
+                                path1.build(), //move to chamber
+                                lift.raise(1000) //chamber height
+                            ),
+                            lift.lower(500),
+                            claw.drop(lift.leftLift, 1000),
+                            new ParallelAction(
+                                path2.build(),
+                                lift.lower(100)
+                            )
                     )
-                ),
-                path2.build()
-            )
-        );
-
+            );
+        }
     }
 }
 
