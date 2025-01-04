@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class VerticalLift {
-    private DcMotorEx leftLift;
+    public DcMotorEx leftLift;
     private DcMotorEx rightLift;
     int top = 1000;
     int bottom = 0;
