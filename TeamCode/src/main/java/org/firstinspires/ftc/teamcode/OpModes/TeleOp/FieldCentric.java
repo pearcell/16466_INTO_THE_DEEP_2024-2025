@@ -225,11 +225,11 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
             if (currentGamepad1.x && !previousGamepad1.x) {
-                if (armclickcount % 2 == 1 && digitalTouch.getState() == false) {
+                if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() < upperBasket) {
                     servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
 
-                } else if (armclickcount % 2 == 0 && digitalTouch.getState() == false) {
+                } else if (armclickcount % 2 == 0 && frontLift.getCurrentPosition() < upperBasket) {
                     servoArm.setPosition(rest);
                     armclickcount = armclickcount + 1;
                 }
