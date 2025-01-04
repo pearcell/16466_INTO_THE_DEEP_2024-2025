@@ -186,10 +186,20 @@ public class FieldCentric extends LinearOpMode {
 
 
 // up
-                if (gamepad1.right_trigger > 0 && frontLift.getCurrentPosition() < upperBasket) {
+            if (gamepad1.right_trigger > 0 && frontLift.getCurrentPosition() < upperBasket) {
                     frontLift.setPower(-gamepad1.right_trigger);
                     backLift.setPower(gamepad1.right_trigger);
-                }
+            }
+
+            if (gamepad1.right_trigger = 0 && gamepad1.left_trigger = 0) {
+                frontLift.setPower(0);
+                backLift.setPower(0);
+            }
+
+            if (gamepad1.right_trigger > 0 && gamepad1.left_trigger > 0) {
+                frontLift.setPower(0);
+                backLift.setPower(0);
+            }
 
                 // This button choice was made so that it is hard to hit on accident,
                 // it can be freely changed based on preference.
