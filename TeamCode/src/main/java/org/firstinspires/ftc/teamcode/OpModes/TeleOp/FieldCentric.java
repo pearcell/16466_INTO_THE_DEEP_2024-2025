@@ -203,73 +203,72 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);
             }
 
-                // This button choice was made so that it is hard to hit on accident,
-                // it can be freely changed based on preference.
-                // The equivalent button is start on Xbox-style controllers.
-                if (gamepad1.start) {
-                    imu.resetYaw();
+            // This button choice was made so that it is hard to hit on accident,
+            // it can be freely changed based on preference.
+            // The equivalent button is start on Xbox-style controllers.
+            if (gamepad1.start) {
+                imu.resetYaw();
+            }
+
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+            if (currentGamepad1.b && !previousGamepad1.b) {
+                if (clawclickcount % 2 == 1 ) {
+                    servoClaw.setPosition(open);
+                    clawclickcount = clawclickcount + 1;
+
+                } else if (clawclickcount % 2 == 0) {
+                    servoClaw.setPosition(closed);
+                    clawclickcount = clawclickcount + 1;
                 }
+            }
+            if (currentGamepad1.x && !previousGamepad1.x) {
+                if (armclickcount % 2 == 1 && digitalTouch.getState() == false) {
+                    servoArm.setPosition(out);
+                    armclickcount = armclickcount + 1;
 
-
-                previousGamepad1.copy(currentGamepad1);
-                previousGamepad2.copy(currentGamepad2);
-                currentGamepad1.copy(gamepad1);
-                currentGamepad2.copy(gamepad2);
-                if (currentGamepad1.b && !previousGamepad1.b) {
-                    if (clawclickcount % 2 == 1 ) {
-                        servoClaw.setPosition(open);
-                        clawclickcount = clawclickcount + 1;
-
-                    } else if (clawclickcount % 2 == 0) {
-                        servoClaw.setPosition(closed);
-                        clawclickcount = clawclickcount + 1;
-                    }
+                } else if (armclickcount % 2 == 0 && digitalTouch.getState() == false) {
+                    servoArm.setPosition(rest);
+                    armclickcount = armclickcount + 1;
                 }
-                if (currentGamepad1.x && !previousGamepad1.x) {
-                    if (armclickcount % 2 == 1 && digitalTouch.getState() == false) {
-                        servoArm.setPosition(out);
-                        armclickcount = armclickcount + 1;
+            }
 
-                    } else if (armclickcount % 2 == 0 && digitalTouch.getState() == false) {
-                        servoArm.setPosition(rest);
-                        armclickcount = armclickcount + 1;
-                    }
-                }
+            /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
 
-                /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
-
-                }*/
-               /* telemetry.addData("DS preview on/off", "3 dots, Camera Stream\n");
-                PredominantColorProcessor.Result result = colorRangeSensor.getAnalysis();
-                telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));*/
-                telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-                telemetry.addData("Encoder Position", position);
-                telemetry.addData("Encoder Revolutions", revolutions);
-                telemetry.addData("Encoder Angle (Degrees)", angle);
-                telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
-                /*telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));*/
-                telemetry.addData("front Left Motor", frontLeftMotor.getPower());
-                telemetry.addData("front Right Motor", frontRightMotor.getPower());
-                telemetry.addData("back Left Motor", backLeftMotor.getPower());
-                telemetry.addData("back Right Motor", backRightMotor.getPower());
-                if (!digitalTouch.getState()) {
-                    telemetry.addData("Button", "PRESSED");
-                } else {
-                    telemetry.addData("Button", "NOT PRESSED");
-                }
-                if (servoClaw.getPosition() == 0) {
-                    telemetry.addData("Claw", "Open");
-                } else {
-                    telemetry.addData("Claw", "closed");
-                }
-                telemetry.addData("Claw Position", servoClaw.getPosition());
-                telemetry.addData("Arm Position", servoArm.getPosition());
-                telemetry.addData("Claw Position", servoClaw.getPosition());
-                telemetry.addData("Claw Click Count", clawclickcount);
-                telemetry.addData("right Trigger", gamepad1.right_trigger);
-                telemetry.addData("left Trigger", gamepad1.left_trigger);
-                /*telemetry.addData("IntegerList", integerList);*/
-                telemetry.update();
+            }
+            telemetry.addData("DS preview on/off", "3 dots, Camera Stream\n");
+            PredominantColorProcessor.Result result = colorRangeSensor.getAnalysis();
+            telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));*/
+            telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+            telemetry.addData("Encoder Position", position);
+            telemetry.addData("Encoder Revolutions", revolutions);
+            telemetry.addData("Encoder Angle (Degrees)", angle);
+            telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+            /*telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));*/
+            telemetry.addData("front Left Motor", frontLeftMotor.getPower());
+            telemetry.addData("front Right Motor", frontRightMotor.getPower());
+            telemetry.addData("back Left Motor", backLeftMotor.getPower());
+            telemetry.addData("back Right Motor", backRightMotor.getPower());
+            if (!digitalTouch.getState()) {
+                telemetry.addData("Button", "PRESSED");
+            } else {
+                telemetry.addData("Button", "NOT PRESSED");
+            }
+            if (servoClaw.getPosition() == 0) {
+                telemetry.addData("Claw", "Open");
+            } else {
+                telemetry.addData("Claw", "closed");
+            }
+            telemetry.addData("Claw Position", servoClaw.getPosition());
+            telemetry.addData("Arm Position", servoArm.getPosition());
+            telemetry.addData("Claw Position", servoClaw.getPosition());
+            telemetry.addData("Claw Click Count", clawclickcount);
+            telemetry.addData("right Trigger", gamepad1.right_trigger);
+            telemetry.addData("left Trigger", gamepad1.left_trigger);
+            /*telemetry.addData("IntegerList", integerList);*/
+            telemetry.update();
 
 
         }
