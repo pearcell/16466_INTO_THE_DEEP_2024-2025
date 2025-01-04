@@ -66,7 +66,7 @@ public class FieldCentric extends LinearOpMode {
         // Declare our motors
         // Make sure your ID's match your configuration
 
-        ColorRangeSensor dsensor = hardwareMap.get(ColorRangeSensor.class, "dsensor");
+       /* ColorRangeSensor dsensor = hardwareMap.get(ColorRangeSensor.class, "dsensor");*/
         digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
 
         digitalTouch.setMode(DigitalChannel.Mode.INPUT);
