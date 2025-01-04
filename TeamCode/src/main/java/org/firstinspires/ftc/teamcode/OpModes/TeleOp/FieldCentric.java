@@ -60,6 +60,7 @@ public class FieldCentric extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
+        // Increases the speed of gathering sensor data
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
@@ -106,18 +107,17 @@ public class FieldCentric extends LinearOpMode {
         int upperBar = 9000;
         int lowerBar = 7000;
         int scoreRange = 200;
-        /*double distance = 2.5;*/
+        /*double distance = 2.5;
 
-        /*ArrayList<Integer> integerList = new ArrayList<>();
+        ArrayList<Integer> integerList = new ArrayList<>();
         integerList.add(upperBasket);
         integerList.add(upperBar);
         integerList.add(lowerBasket);
         integerList.add(lowerBar);
         integerList.add(scoreRange);*/
 
-
-       /* if (isStopRequested()) return;
-        PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
+        if (isStopRequested()) return;
+       /* PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
                 .setSwatches(
                         PredominantColorProcessor.Swatch.RED,
@@ -182,10 +182,11 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad1.left_trigger > 0) {
                 frontLift.setPower(gamepad1.left_trigger);
                 backLift.setPower(-gamepad1.left_trigger);
-            } else if (backLift.getCurrentPosition() > upperBasket || frontLift.getCurrentPosition() > upperBasket) {
+            }
+            if (backLift.getCurrentPosition() > upperBasket || frontLift.getCurrentPosition() > upperBasket) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
-            } else if (backLift.getCurrentPosition() == upperBar || frontLift.getCurrentPosition() == upperBar) {
+            } else if  (backLift.getCurrentPosition() == upperBar || frontLift.getCurrentPosition() == upperBar) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             } else if (backLift.getCurrentPosition() == lowerBasket || frontLift.getCurrentPosition() == lowerBasket) {
