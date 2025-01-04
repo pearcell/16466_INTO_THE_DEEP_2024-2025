@@ -30,6 +30,7 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 
 import java.util.List;
+import java.util.Objects;
 
 @TeleOp
 public class FieldCentric extends LinearOpMode {
@@ -105,9 +106,9 @@ public class FieldCentric extends LinearOpMode {
         int upperBar = 9000;
         int lowerBar = 7000;
         int scoreRange = 200;
-        double distance = 2.5;
+        /*double distance = 2.5;*/
 
-       /* ArrayList<Integer> integerList = new ArrayList<>();
+        /*ArrayList<Integer> integerList = new ArrayList<>();
         integerList.add(upperBasket);
         integerList.add(upperBar);
         integerList.add(lowerBasket);
@@ -115,7 +116,7 @@ public class FieldCentric extends LinearOpMode {
         integerList.add(scoreRange);*/
 
 
-        if (isStopRequested()) return;
+       /* if (isStopRequested()) return;
         PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
                 .setSwatches(
@@ -129,7 +130,7 @@ public class FieldCentric extends LinearOpMode {
                 .addProcessor(colorRangeSensor)
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "dsensor"))
-                .build();
+                .build();*/
         while (opModeIsActive()) {
 
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0) {
@@ -172,6 +173,7 @@ public class FieldCentric extends LinearOpMode {
 
              /*if (gamepad1.dpad_up) {
                  frontLift.setTargetPosition();
+                 frontLeftMotor.setPower(-1);
                  frontLeftMotor.setPower(1);
                  frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
              }  while (frontLift.isBusy()) {
@@ -180,7 +182,7 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad1.left_trigger > 0) {
                 frontLift.setPower(gamepad1.left_trigger);
                 backLift.setPower(-gamepad1.left_trigger);
-            } else if (backLift.getCurrentPosition() == upperBasket || frontLift.getCurrentPosition() == upperBasket) {
+            } else if (backLift.getCurrentPosition() > upperBasket || frontLift.getCurrentPosition() > upperBasket) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             } else if (backLift.getCurrentPosition() == upperBar || frontLift.getCurrentPosition() == upperBar) {
@@ -238,18 +240,18 @@ public class FieldCentric extends LinearOpMode {
                     }
                 }
 
-                if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
+                /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
 
-                }
-                telemetry.addData("DS preview on/off", "3 dots, Camera Stream\n");
+                }*/
+               /* telemetry.addData("DS preview on/off", "3 dots, Camera Stream\n");
                 PredominantColorProcessor.Result result = colorRangeSensor.getAnalysis();
-                telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));
+                telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));*/
                 telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
                 telemetry.addData("Encoder Position", position);
                 telemetry.addData("Encoder Revolutions", revolutions);
                 telemetry.addData("Encoder Angle (Degrees)", angle);
                 telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
-                telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));
+                /*telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));*/
                 telemetry.addData("front Left Motor", frontLeftMotor.getPower());
                 telemetry.addData("front Right Motor", frontRightMotor.getPower());
                 telemetry.addData("back Left Motor", backLeftMotor.getPower());
@@ -270,7 +272,7 @@ public class FieldCentric extends LinearOpMode {
                 telemetry.addData("Claw Click Count", clawclickcount);
                 telemetry.addData("right Trigger", gamepad1.right_trigger);
                 telemetry.addData("left Trigger", gamepad1.left_trigger);
-
+                /*telemetry.addData("IntegerList", integerList);*/
                 telemetry.update();
 
 
