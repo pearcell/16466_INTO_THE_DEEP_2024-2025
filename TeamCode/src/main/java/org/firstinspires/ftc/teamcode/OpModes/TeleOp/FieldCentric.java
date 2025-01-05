@@ -95,10 +95,10 @@ public class FieldCentric extends LinearOpMode {
         imu.resetYaw();
         servoArm.setPosition(.5);
         waitForStart();
-        double closed = 0.15;
+        double closed = 0.17;
         double open = 0.05;
         double clawclickcount = 0;
-        double rest = 0.5;
+        double rest = 0.48;
         double out = 0.2;
         double armclickcount = 0;
 
@@ -181,7 +181,7 @@ public class FieldCentric extends LinearOpMode {
 
 
             // down
-            if (gamepad1.left_trigger > 0 && !digitalTouch.getState() ) {
+            if (gamepad1.left_trigger > 0 && digitalTouch.getState()) {
                 frontLift.setPower(-gamepad1.left_trigger);
                 backLift.setPower(gamepad1.left_trigger);
             }

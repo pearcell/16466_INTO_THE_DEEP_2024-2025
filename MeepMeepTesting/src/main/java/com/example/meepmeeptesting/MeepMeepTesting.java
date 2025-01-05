@@ -15,13 +15,9 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(11.7, 58.3, Math.toRadians(-90)))
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-90))
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-60))
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-45))
-                .setTangent(Math.toRadians(-90))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(23, 11, Math.toRadians(180)), Math.toRadians(180))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, 0))
+                .splineTo(new Vector2d(30, 30), Math.PI / 2)
+                .splineTo(new Vector2d(0, 60), Math.PI)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_OFFICIAL)
