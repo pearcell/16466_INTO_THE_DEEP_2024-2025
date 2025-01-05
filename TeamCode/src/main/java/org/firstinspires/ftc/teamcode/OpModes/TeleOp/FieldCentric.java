@@ -84,8 +84,8 @@ public class FieldCentric extends LinearOpMode {
         frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
         backLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
         backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
-
-
+        backLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -93,10 +93,10 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
-
+        servoArm.setPosition(.5);
         waitForStart();
         double closed = 0.15;
-        double open = 0;
+        double open = 0.05;
         double clawclickcount = 0;
         double rest = 0.5;
         double out = 0.2;
@@ -105,9 +105,9 @@ public class FieldCentric extends LinearOpMode {
         int upperBasket = 10000;
         /*int lowerBasket = 8000;
         int upperBar = 9000;
-        int lowerBar = 7000;
+        int lowerBar = 7000;*/
         int scoreRange = 200;
-        double distance = 2.5;
+        /*double distance = 2.5;
 
         ArrayList<Integer> integerList = new ArrayList<>();
         integerList.add(upperBasket);
@@ -181,16 +181,16 @@ public class FieldCentric extends LinearOpMode {
 
 
             // down
-            if (gamepad1.left_trigger > 0 && digitalTouch.getState() == false ) {
-                frontLift.setPower(gamepad1.left_trigger);
-                backLift.setPower(-gamepad1.left_trigger);
+            if (gamepad1.left_trigger > 0 && !digitalTouch.getState() ) {
+                frontLift.setPower(-gamepad1.left_trigger);
+                backLift.setPower(gamepad1.left_trigger);
             }
 
 
             // up
             if (gamepad1.right_trigger > 0 && frontLift.getCurrentPosition() < upperBasket) {
-                    frontLift.setPower(-gamepad1.right_trigger);
-                    backLift.setPower(gamepad1.right_trigger);
+                    frontLift.setPower(gamepad1.right_trigger);
+                    backLift.setPower(-gamepad1.right_trigger);
             }
 
             if (gamepad1.right_trigger == 0 && gamepad1.left_trigger == 0) {
@@ -229,9 +229,24 @@ public class FieldCentric extends LinearOpMode {
                     servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
 
+
                 } else if (armclickcount % 2 == 0 && frontLift.getCurrentPosition() < upperBasket) {
                     servoArm.setPosition(rest);
                     armclickcount = armclickcount + 1;
+                }
+            }
+
+            if (gamepad1.x) {
+                if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() < scoreRange) {
+                    frontLift.setTargetPosition(scoreRange);
+                    backLift.setPower(1);
+                    frontLift.setPower(-1);
+                    frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                } else if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() > scoreRange) {
+                    frontLift.setTargetPosition(scoreRange);
+                    backLift.setPower(-1);
+                    frontLift.setPower(1);
+                    frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             }
 
@@ -242,15 +257,18 @@ public class FieldCentric extends LinearOpMode {
             PredominantColorProcessor.Result result = colorRangeSensor.getAnalysis();
             telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));*/
             telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-            telemetry.addData("Encoder Position", position);
-            telemetry.addData("Encoder Revolutions", revolutions);
-            telemetry.addData("Encoder Angle (Degrees)", angle);
-            telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
             /*telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));*/
             telemetry.addData("front Left Motor", frontLeftMotor.getPower());
             telemetry.addData("front Right Motor", frontRightMotor.getPower());
             telemetry.addData("back Left Motor", backLeftMotor.getPower());
             telemetry.addData("back Right Motor", backRightMotor.getPower());
+            telemetry.addData("back Lift", backLift.getPower());
+            telemetry.addData("front Lift", frontLift.getPower());
+            telemetry.addData("back Lift Pos", backLift.getCurrentPosition());
+            telemetry.addData("front Lift Pos", frontLift.getCurrentPosition());
+            telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
+            telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
+            telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
             if (!digitalTouch.getState()) {
                 telemetry.addData("Button", "PRESSED");
             } else {
@@ -263,7 +281,6 @@ public class FieldCentric extends LinearOpMode {
             }
             telemetry.addData("Claw Position", servoClaw.getPosition());
             telemetry.addData("Arm Position", servoArm.getPosition());
-            telemetry.addData("Claw Position", servoClaw.getPosition());
             telemetry.addData("Claw Click Count", clawclickcount);
             telemetry.addData("right Trigger", gamepad1.right_trigger);
             telemetry.addData("left Trigger", gamepad1.left_trigger);
