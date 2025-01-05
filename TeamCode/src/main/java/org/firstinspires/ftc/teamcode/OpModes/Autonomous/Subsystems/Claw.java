@@ -48,8 +48,6 @@ public class Claw {
         }
     }
 
-
-
     public Action drop(DcMotorEx motor, int encA) {
         return new Drop(motor, encA);
     }
