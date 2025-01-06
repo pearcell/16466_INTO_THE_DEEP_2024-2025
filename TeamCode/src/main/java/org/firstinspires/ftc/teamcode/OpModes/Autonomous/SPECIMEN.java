@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -12,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
 
 @Autonomous
@@ -23,6 +23,7 @@ public class SPECIMEN extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
+        HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
         //initialize trajectories
         TrajectoryActionBuilder path1 = drive.actionBuilder(beginPose)
@@ -51,6 +52,7 @@ public class SPECIMEN extends LinearOpMode {
 
         //don't forget to run grab() action during init to maintain possession of specimen
         Actions.runBlocking(claw.grab());
+        Actions.runBlocking(intake.retract());
 
         waitForStart();
 
@@ -65,7 +67,7 @@ public class SPECIMEN extends LinearOpMode {
                                 lift.raise(1000) //chamber height
                             ),
                             lift.lower(500),
-                            claw.drop(lift.leftLift, 1000),
+                            claw.drop(lift.frontLift, 1000),
                             new ParallelAction(
                                 path2.build(),
                                 lift.lower(100)

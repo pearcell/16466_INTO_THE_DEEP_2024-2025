@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
     private Servo clawServo;
-    private int openPos;
-    private int closedPos;
+    private double openPos = 0.05;
+    private double closedPos = 0.17;
 
     public Claw(HardwareMap hardwareMap) {
-        clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawServo = hardwareMap.get(Servo.class, "ServoClaw");
     }
 
     public class Grab implements Action {
@@ -40,7 +40,7 @@ public class Claw {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (motorL.getCurrentPosition() >= encoderValue) {
+            if (motorL.getCurrentPosition() <= encoderValue) {
                 clawServo.setPosition(openPos);
                 return false;
             }

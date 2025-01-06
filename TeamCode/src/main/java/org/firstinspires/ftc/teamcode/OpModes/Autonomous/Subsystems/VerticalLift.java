@@ -4,16 +4,21 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class VerticalLift {
-    public DcMotorEx leftLift;
-    private DcMotorEx rightLift;
+    public DcMotorEx frontLift;
+    public DcMotorEx backLift;
 
     public VerticalLift(HardwareMap hardwareMap) {
-        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
-        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
+        frontLift = hardwareMap.get(DcMotorEx.class, "frontLift");
+        backLift = hardwareMap.get(DcMotorEx.class, "backLift");
+        backLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public class Raise implements Action {
@@ -27,19 +32,19 @@ public class VerticalLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                leftLift.setPower(1);
-                rightLift.setPower(1);
+                frontLift.setPower(1);
+                backLift.setPower(1);
                 initialized = true;
             }
 
-            double posLeft = leftLift.getCurrentPosition();
-            double posRight = rightLift.getCurrentPosition();
+            double posFront = frontLift.getCurrentPosition();
+            double posBack = backLift.getCurrentPosition();
 
-            if (posLeft < encoderVal || posRight < encoderVal) {
+            if (posFront < encoderVal || posBack < encoderVal) {
                 return true;
             } else {
-                leftLift.setPower(0);
-                rightLift.setPower(0);
+                frontLift.setPower(0);
+                backLift.setPower(0);
                 return false;
             }
         }
@@ -60,19 +65,19 @@ public class VerticalLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                leftLift.setPower(-1);
-                rightLift.setPower(-1);
+                frontLift.setPower(-1);
+                backLift.setPower(-1);
                 initialized = true;
             }
 
-            double posLeft = leftLift.getCurrentPosition();
-            double posRight = rightLift.getCurrentPosition();
+            double posLeft = frontLift.getCurrentPosition();
+            double posRight = backLift.getCurrentPosition();
 
             if (posLeft > encoderValue || posRight > encoderValue) {
                 return true;
             } else {
-                leftLift.setPower(0);
-                rightLift.setPower(0);
+                frontLift.setPower(0);
+                backLift.setPower(0);
                 return false;
             }
         }

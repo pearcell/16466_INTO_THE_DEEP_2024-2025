@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
 
-
+@Autonomous
 public class SAMPLE extends LinearOpMode {
     @Override
     public void runOpMode() {
@@ -51,6 +51,7 @@ public class SAMPLE extends LinearOpMode {
 
         //don't forget to run grab() action during init to maintain possession of sample
         Actions.runBlocking(claw.grab());
+        Actions.runBlocking(intake.retract());
 
         waitForStart();
 
@@ -63,13 +64,13 @@ public class SAMPLE extends LinearOpMode {
                         new ParallelAction(
                                 score.build(),
                                 lift.raise(1000),
-                                claw.drop(lift.leftLift, 1500)
+                                claw.drop(lift.frontLift, 1500)
                         ),
                         //score block 2
                         new ParallelAction(
                                 grab1.build(),
                                 lift.lower(0),
-                                intake.extend(lift.leftLift, 50)
+                                intake.extend(lift.frontLift, 50)
                         ),
                         new ParallelAction(
                                 claw.grab(),
@@ -78,13 +79,13 @@ public class SAMPLE extends LinearOpMode {
                         new ParallelAction(
                                 score.build(),
                                 lift.raise(1000),
-                                claw.drop(lift.leftLift, 1500)
+                                claw.drop(lift.frontLift, 1500)
                         ),
                         //score block 3
                         new ParallelAction(
                                 grab2.build(),
                                 lift.lower(0),
-                                intake.extend(lift.leftLift, 50)
+                                intake.extend(lift.frontLift, 50)
                         ),
                         new ParallelAction(
                                 claw.grab(),
@@ -93,13 +94,13 @@ public class SAMPLE extends LinearOpMode {
                         new ParallelAction(
                                 score.build(),
                                 lift.raise(1000),
-                                claw.drop(lift.leftLift, 1500)
+                                claw.drop(lift.frontLift, 1500)
                         ),
                         //score block 4
                         new ParallelAction(
                                 grab3.build(),
                                 lift.lower(0),
-                                intake.extend(lift.leftLift, 50)
+                                intake.extend(lift.frontLift, 50)
                         ),
                         new ParallelAction(
                                 claw.grab(),
@@ -108,7 +109,7 @@ public class SAMPLE extends LinearOpMode {
                         new ParallelAction(
                                 score.build(),
                                 lift.raise(1000),
-                                claw.drop(lift.leftLift, 1500)
+                                claw.drop(lift.frontLift, 1500)
                         ),
                         //score park
                         new ParallelAction(
