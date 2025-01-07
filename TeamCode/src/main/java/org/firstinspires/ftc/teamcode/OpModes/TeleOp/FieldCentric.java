@@ -105,6 +105,8 @@ public class FieldCentric extends LinearOpMode {
         int upperBasket = 3200;
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
+        double centricClickCount = 0;
+
         /*int lowerBasket = 8000;
         int upperBar = 9000;
         int lowerBar = 7000;
@@ -171,12 +173,31 @@ public class FieldCentric extends LinearOpMode {
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
             }
-
+            // field Centric
             double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
             double frontLeftPower = (rotY + rotX + rx) / denominator;
             double backLeftPower = (rotY - rotX + rx) / denominator;
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
+
+
+            if (currentGamepad1.y && !previousGamepad1.y) {
+               // field Centric
+                if (centricClickCount % 2 == 1 ) {
+                    frontLeftPower = (rotY + rotX + rx) / denominator;
+                    backLeftPower = (rotY - rotX + rx) / denominator;
+                    frontRightPower = (rotY - rotX - rx) / denominator;
+                    backRightPower = (rotY + rotX - rx) / denominator;
+                    centricClickCount = centricClickCount + 1;
+                // robot Centric
+                } else if (centricClickCount% 2 == 0) {
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    centricClickCount = centricClickCount + 1;
+                }
+            }
 
             frontLeftMotor.setPower(frontLeftPower * driveTrainSpeed);
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
@@ -189,13 +210,7 @@ public class FieldCentric extends LinearOpMode {
             double angle = revolutions * 360;
             double angleNormalized = angle % 360;
 
-             /*if (gamepad1.dpad_up) {
-                 frontLift.setTargetPosition();
-                 frontLeftMotor.setPower(-1);
-                 frontLeftMotor.setPower(1);
-                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-             }  while (frontLift.isBusy()) {
-             }*/
+
 
 
             // down
@@ -268,7 +283,10 @@ public class FieldCentric extends LinearOpMode {
                 servoArm.setPosition(rest);
                 armclickcount = armclickcount + 1;
             }
-
+            if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+                servoClaw.setPosition(closed);
+                clawclickcount = clawclickcount + 1;
+            }
 
 
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
