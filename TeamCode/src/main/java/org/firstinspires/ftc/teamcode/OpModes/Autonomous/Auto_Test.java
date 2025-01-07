@@ -45,15 +45,13 @@ public class Auto_Test extends LinearOpMode {
                 new SequentialAction(
                         new ParallelAction(
                                 path1.build(),
-                                lift.raise(1000)
+                                lift.raise(1000, 1)
                         ),
                         new ParallelAction(
-                                lift.lower(0),
+                                lift.lower(0, .5),
                                 claw.drop(lift.frontLift, 800)
                         )
                 )
-
         );
-
     }
 }
