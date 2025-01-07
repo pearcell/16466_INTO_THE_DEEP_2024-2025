@@ -165,11 +165,11 @@ public class FieldCentric extends LinearOpMode {
 
             if (currentGamepad1.a && !previousGamepad1.a) {
                 if (driveTrainClickCount % 2 == 1 ) {
-                   driveTrainSpeed = driveTrainSpeed + .5;
+                   driveTrainSpeed = 1;
                     driveTrainClickCount = driveTrainClickCount + 1;
 
                 } else if (driveTrainClickCount% 2 == 0) {
-                    driveTrainSpeed = driveTrainSpeed - .5;
+                    driveTrainSpeed = .5;
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
             }
@@ -245,7 +245,8 @@ public class FieldCentric extends LinearOpMode {
 
             if (Math.abs(frontLift.getCurrentPosition()) > 1600) {
                 driveTrainSpeed = .5;
-                driveTrainClickCount = driveTrainClickCount + 1;
+            } else if (Math.abs(frontLift.getCurrentPosition()) <= 1600 && driveTrainClickCount % 2 == 1) {
+               driveTrainSpeed = 1;
             }
 
             // This button choice was made so that it is hard to hit on accident,
@@ -281,11 +282,10 @@ public class FieldCentric extends LinearOpMode {
 
             if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
-                armclickcount = armclickcount + 1;
             }
             if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoClaw.setPosition(closed);
-                clawclickcount = clawclickcount + 1;
+
             }
 
 
@@ -321,6 +321,7 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Claw Position", servoClaw.getPosition());
             telemetry.addData("Arm Position", servoArm.getPosition());
             telemetry.addData("Claw Click Count", clawclickcount);
+            telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
             telemetry.addData("right Trigger", gamepad1.right_trigger);
             telemetry.addData("left Trigger", gamepad1.left_trigger);
