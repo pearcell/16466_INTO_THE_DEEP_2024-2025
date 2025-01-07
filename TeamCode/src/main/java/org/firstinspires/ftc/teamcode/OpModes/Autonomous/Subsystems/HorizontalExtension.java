@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HorizontalExtension {
-    private Servo servo;
+    public Servo servo;
 
     public HorizontalExtension(HardwareMap hardwareMap) {
         servo = hardwareMap.get(Servo.class, "ServoArm");
@@ -26,11 +26,11 @@ public class HorizontalExtension {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            //if (motorRef.getCurrentPosition() <= encoderValue) {
+            if (motorRef.getCurrentPosition() <= encoderValue) {
                 servo.setPosition(.2);
                 return false;
-           // }
-            //return true;
+            }
+            return true;
         }
     }
 

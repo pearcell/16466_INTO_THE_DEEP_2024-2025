@@ -24,16 +24,18 @@ public class VerticalLift {
     public class Raise implements Action {
         private boolean initialized = false;
         private int encoderVal;
+        private double powerR;
 
-        public Raise(int encVal) {
+        public Raise(int encVal, double power2) {
             encoderVal = encVal;
+            powerR = power2;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                frontLift.setPower(1);
-                backLift.setPower(1);
+                frontLift.setPower(powerR);
+                backLift.setPower(powerR);
                 initialized = true;
             }
 
@@ -50,30 +52,32 @@ public class VerticalLift {
         }
     }
 
-    public Action raise(int encVal1) {
-        return new Raise(encVal1);
+    public Action raise(int encVal1, double power1) {
+        return new Raise(encVal1, power1);
     }
 
     public class Lower implements Action {
         private boolean initialized = false;
         private int encoderValue;
+        private double powerL;
 
-        public Lower(int encVal) {
+        public Lower(int encVal, double power2) {
             encoderValue = encVal;
+            powerL = power2;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                frontLift.setPower(-1);
-                backLift.setPower(-1);
+                frontLift.setPower(-powerL);
+                backLift.setPower(-powerL);
                 initialized = true;
             }
 
-            double posLeft = frontLift.getCurrentPosition();
-            double posRight = backLift.getCurrentPosition();
+            double posFront = frontLift.getCurrentPosition();
+            double posBack = backLift.getCurrentPosition();
 
-            if (posLeft > encoderValue || posRight > encoderValue) {
+            if (posFront > encoderValue || posBack > encoderValue) {
                 return true;
             } else {
                 frontLift.setPower(0);
@@ -83,8 +87,8 @@ public class VerticalLift {
         }
     }
 
-    public Action lower(int encVal1) {
-        return new Lower(encVal1);
+    public Action lower(int encVal1, double power1) {
+        return new Lower(encVal1, power1);
     }
 
 }

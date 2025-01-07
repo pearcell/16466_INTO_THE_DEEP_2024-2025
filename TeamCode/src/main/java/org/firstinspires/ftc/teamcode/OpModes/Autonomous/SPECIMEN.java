@@ -19,7 +19,7 @@ public class SPECIMEN extends LinearOpMode {
     @Override
     public void runOpMode() {
         //instantiate subsystems
-        Pose2d beginPose = new Pose2d(-11.7, 58.3, Math.toRadians(-90));
+        Pose2d beginPose = new Pose2d(-15.5, 63, Math.toRadians(-90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
@@ -52,7 +52,7 @@ public class SPECIMEN extends LinearOpMode {
 
         //don't forget to run grab() action during init to maintain possession of specimen
         Actions.runBlocking(claw.grab());
-        Actions.runBlocking(intake.retract());
+        intake.servo.setPosition(.48);
 
         waitForStart();
 
@@ -64,13 +64,13 @@ public class SPECIMEN extends LinearOpMode {
                     new SequentialAction(
                             new ParallelAction(
                                 path1.build(), //move to chamber
-                                lift.raise(1000) //chamber height
+                                lift.raise(1000, 1) //chamber height
                             ),
-                            lift.lower(500),
+                            lift.lower(500, .5),
                             claw.drop(lift.frontLift, 1000),
                             new ParallelAction(
                                 path2.build(),
-                                lift.lower(100)
+                                lift.lower(100, .5)
                             )
                     )
             );
