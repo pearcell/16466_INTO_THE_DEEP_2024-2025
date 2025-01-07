@@ -29,27 +29,40 @@ public class SAMPLE extends LinearOpMode {
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
     //initialize trajectories
-        //default path to return to basket
-        TrajectoryActionBuilder score = drive.actionBuilder(beginPose)
+        //score preloaded sample
+        TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
                 .splineToLinearHeading(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)), Math.toRadians(45));
 
         //sample 1 grab
-        TrajectoryActionBuilder grab1 = drive.actionBuilder(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)))
+        TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
                 .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-90));
 
+        //sample 1 score
+        TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+
+
         //sample 2 grab
-        TrajectoryActionBuilder grab2 = drive.actionBuilder(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)))
+        TrajectoryActionBuilder grab2 = score1.endTrajectory().fresh()
                 .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-60));
 
+        //sample 2 score
+        TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+
         //sample 3 grab
-        TrajectoryActionBuilder grab3 = drive.actionBuilder(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)))
+        TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
                 .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-45));
 
+        //sample 3 score
+        TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+
         //park next to sub for level 1 ascent
-        TrajectoryActionBuilder park = drive.actionBuilder(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)))
-                .setTangent(Math.toRadians(-90))
+        TrajectoryActionBuilder park = score3.endTrajectory().fresh()
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(23, 11, Math.toRadians(180)), Math.toRadians(180));
+                .splineToSplineHeading(new Pose2d(new Vector2d(38, 11), Math.toRadians(-90)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(25, 11), Math.toRadians(180)), Math.toRadians(180));
 
 
         //don't forget to run grab() action during init to maintain possession of sample
@@ -64,19 +77,19 @@ public class SAMPLE extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        score.build(),
+                        scorePreload.build(),
                         new SleepAction(1),
                         grab1.build(),
                         new SleepAction(1),
-                        score.build(),
+                        score1.build(),
                         new SleepAction(1),
                         grab2.build(),
                         new SleepAction(1),
-                        score.build(),
+                        score2.build(),
                         new SleepAction(1),
                         grab3.build(),
                         new SleepAction(1),
-                        score.build(),
+                        score3.build(),
                         new SleepAction(1),
                         park.build()
                 )

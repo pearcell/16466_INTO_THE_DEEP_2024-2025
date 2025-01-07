@@ -1,5 +1,4 @@
-package OpModes;
-
+package org.firstinspires.ftc.teamcode.OpModes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
