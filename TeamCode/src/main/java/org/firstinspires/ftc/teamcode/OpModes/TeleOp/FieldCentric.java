@@ -182,14 +182,14 @@ public class FieldCentric extends LinearOpMode {
 
 
             if (currentGamepad1.y && !previousGamepad1.y) {
-               // field Centric
+               // field Centric.
                 if (centricClickCount % 2 == 1 ) {
                     frontLeftPower = (rotY + rotX + rx) / denominator;
                     backLeftPower = (rotY - rotX + rx) / denominator;
                     frontRightPower = (rotY - rotX - rx) / denominator;
                     backRightPower = (rotY + rotX - rx) / denominator;
                     centricClickCount = centricClickCount + 1;
-                // robot Centric
+                // robot Centric.
                 } else if (centricClickCount% 2 == 0) {
                     frontLeftPower = (y + x + rx) / denominator;
                     backLeftPower = (y - x + rx) / denominator;
