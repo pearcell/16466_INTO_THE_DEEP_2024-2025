@@ -183,14 +183,14 @@ public class FieldCentric extends LinearOpMode {
 
             if (currentGamepad1.y && !previousGamepad1.y) {
                // field Centric.
-                if (centricClickCount % 2 == 1 ) {
+                if (centricClickCount % 2 == 1) {
                     frontLeftPower = (rotY + rotX + rx) / denominator;
                     backLeftPower = (rotY - rotX + rx) / denominator;
                     frontRightPower = (rotY - rotX - rx) / denominator;
                     backRightPower = (rotY + rotX - rx) / denominator;
                     centricClickCount = centricClickCount + 1;
                 // robot Centric.
-                } else if (centricClickCount% 2 == 0) {
+                } else if (centricClickCount % 2 == 0) {
                     frontLeftPower = (y + x + rx) / denominator;
                     backLeftPower = (y - x + rx) / denominator;
                     frontRightPower = (y - x - rx) / denominator;
@@ -215,15 +215,15 @@ public class FieldCentric extends LinearOpMode {
 
             // down
             if (gamepad2.left_trigger > 0 && digitalTouch.getState()) {
-                frontLift.setPower(-gamepad2.left_trigger * driveTrainSpeed);
-                backLift.setPower(gamepad2.left_trigger * driveTrainSpeed);
+                frontLift.setPower(-gamepad2.left_trigger);
+                backLift.setPower(gamepad2.left_trigger);
             }
 
 
             // up
             if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket  ) {
-                    frontLift.setPower(gamepad2.right_trigger * driveTrainSpeed);
-                    backLift.setPower(-gamepad2.right_trigger * driveTrainSpeed);
+                    frontLift.setPower(gamepad2.right_trigger);
+                    backLift.setPower(-gamepad2.right_trigger);
             }
 
 
