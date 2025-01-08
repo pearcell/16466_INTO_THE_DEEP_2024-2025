@@ -219,6 +219,10 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(gamepad2.left_trigger);
             }
 
+            if (!digitalTouch.getState() && gamepad2.right_trigger == 0) {
+                frontLift.setPower(0);
+                backLift.setPower(0);
+            }
 
             // up
             if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket  ) {
