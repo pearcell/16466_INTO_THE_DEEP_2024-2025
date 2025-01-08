@@ -102,6 +102,7 @@ public class FieldCentric extends LinearOpMode {
         double out = 0.2;
         double armclickcount = 0;
         int armLockOut = 250;
+        int robotSlowDown = 1400;
         int upperBasket = 3200;
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
@@ -166,9 +167,9 @@ public class FieldCentric extends LinearOpMode {
             if (currentGamepad1.a && !previousGamepad1.a) {
                 if (driveTrainClickCount % 2 == 1 ) {
                    driveTrainSpeed = 1;
-                    driveTrainClickCount = driveTrainClickCount + 1;
+                   driveTrainClickCount = driveTrainClickCount + 1;
 
-                } else if (driveTrainClickCount% 2 == 0) {
+                } else if (driveTrainClickCount % 2 == 0) {
                     driveTrainSpeed = .5;
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
@@ -243,9 +244,9 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);
             }
 
-            if (Math.abs(frontLift.getCurrentPosition()) > 1600) {
+            if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown) {
                 driveTrainSpeed = .5;
-            } else if (Math.abs(frontLift.getCurrentPosition()) <= 1600 && driveTrainClickCount % 2 == 1) {
+            } else if (Math.abs(frontLift.getCurrentPosition()) <= robotSlowDown && driveTrainClickCount % 2 == 0) {
                driveTrainSpeed = 1;
             }
 
@@ -280,13 +281,13 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
 
-            if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
+            /*if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
             if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoClaw.setPosition(closed);
 
-            }
+            }*/
 
 
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
