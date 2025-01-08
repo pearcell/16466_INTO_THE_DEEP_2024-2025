@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
+package org.firstinspires.ftc.teamcode.OpModes.Autonomous.Tests;
 
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -9,11 +9,11 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift_PIDTEST_2;
 
 @Autonomous
 public class Auto_Test extends LinearOpMode {
@@ -23,7 +23,7 @@ public class Auto_Test extends LinearOpMode {
 
         Pose2d beginPose = new Pose2d(0, 0, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-        VerticalLift lift = new VerticalLift(hardwareMap);
+        VerticalLift_PIDTEST_2 lift = new VerticalLift_PIDTEST_2(hardwareMap);
         Claw claw = new Claw(hardwareMap);
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
@@ -43,14 +43,8 @@ public class Auto_Test extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        new ParallelAction(
-                                path1.build(),
-                                lift.raise(1000, 1)
-                        ),
-                        new ParallelAction(
-                                lift.lower(0, .5),
-                                claw.drop(lift.frontLift, 800)
-                        )
+                        lift.SetSlidePos(500),
+                        lift.move()
                 )
         );
     }

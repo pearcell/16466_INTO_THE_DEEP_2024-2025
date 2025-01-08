@@ -20,8 +20,6 @@ public class VerticalLift_PIDTEST_2 {
         frontLift = hardwareMap.get(DcMotorEx.class, "frontLift");
         backLift = hardwareMap.get(DcMotorEx.class, "backLift");
         backLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public class Move implements Action {
