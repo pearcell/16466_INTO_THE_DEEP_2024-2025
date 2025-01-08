@@ -267,12 +267,12 @@ public class FieldCentric extends LinearOpMode {
                     clawclickcount = clawclickcount + 1;
                 }
             }
+
             if (currentGamepad2.x && !previousGamepad2.x) {
                 //This prevents claw from extended past 250 ticks
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                     servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
-
 
                 } else if (armclickcount % 2 == 0 ) {
                     servoArm.setPosition(rest);
@@ -313,7 +313,7 @@ public class FieldCentric extends LinearOpMode {
             } else {
                 telemetry.addData("Button", "NOT PRESSED");
             }
-            if (servoClaw.getPosition() == 0) {
+            if (servoClaw.getPosition() == open) {
                 telemetry.addData("Claw", "Open");
             } else {
                 telemetry.addData("Claw", "closed");
