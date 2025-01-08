@@ -25,7 +25,7 @@ public class Tune_PID extends LinearOpMode {
         backLift = hardwareMap.get(DcMotorEx.class, "backLift");
         backLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        PIDController pid = new PIDController();
+        PIDController pid = new PIDController(0, 0, 0);
         ElapsedTime timer = new ElapsedTime();
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -39,8 +39,13 @@ public class Tune_PID extends LinearOpMode {
 
             //pid stuff here
             frontLift.setPower(pid.calculate(targetPos, posFront, timer.seconds())); //front pid output
-            backLift.setPower(pid.calculate(targetPos, posBack, timer.seconds())); //back pid output
+            backLift.setPower(pid.calculate(targetPos, posFront, timer.seconds())); //back pid output
 
+            /*TODO right now the pid stuff above is configured to find gains for front lift motor.
+                After those gains are set, move backLift to the top and set calculate argument
+                to pos back in both methods to find gains for back lift motor.*/
+
+            //TODO when you find gain for one side right it down.
             telemetry.addData("frontPos", posFront);
             telemetry.addData("target", targetPos);
             telemetry.update();

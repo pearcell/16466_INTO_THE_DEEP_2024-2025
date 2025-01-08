@@ -24,7 +24,7 @@ public class VerticalLift_PIDTEST_2 {
 
     public class Move implements Action {
         private boolean initialized = false;
-        private PIDController pid = new PIDController();
+        private PIDController pid = new PIDController(0,0,0);
         private ElapsedTime timer = new ElapsedTime();
 
         @Override

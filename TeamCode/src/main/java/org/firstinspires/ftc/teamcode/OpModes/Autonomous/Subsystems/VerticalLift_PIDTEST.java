@@ -30,7 +30,7 @@ public class VerticalLift_PIDTEST {
         private Servo servoMain;
         double servoPosCurrent;
         double servoPosPrevious = 0;
-        private PIDController pid = new PIDController();
+        private PIDController pid = new PIDController(0, 0, 0);
         private ElapsedTime timer = new ElapsedTime();
 
         public Raise(int encVal, Servo servo) {

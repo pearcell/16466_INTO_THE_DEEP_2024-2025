@@ -12,7 +12,11 @@ public class PIDController {
 
     double lastError;
 
-    ElapsedTime timer = new ElapsedTime();
+    public PIDController(double kp, double ki, double kd) {
+        this.Kp = kp;
+        this.Ki = ki;
+        this.Kd = kd;
+    }
 
     public double calculate(double desiredPos, double processVariable, double dt) {
         setpoint = desiredPos;
