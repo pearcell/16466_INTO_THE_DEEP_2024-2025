@@ -106,7 +106,7 @@ public class FieldCentric extends LinearOpMode {
         int upperBasket = 3200;
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
-        double centricClickCount = 0;
+        double centricClickCount = 1;
 
         /*int lowerBasket = 8000;
         int upperBar = 9000;
@@ -180,7 +180,6 @@ public class FieldCentric extends LinearOpMode {
             double backLeftPower = (rotY - rotX + rx) / denominator;
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
-
 
             if (currentGamepad1.y && !previousGamepad1.y) {
                // field Centric.
@@ -281,10 +280,10 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
 
-            /*if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
+            if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
-            if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+           /* if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoClaw.setPosition(closed);
 
             }*/
@@ -324,6 +323,7 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Claw Click Count", clawclickcount);
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
+            telemetry.addData("Centric Click Count", centricClickCount);
             telemetry.addData("right Trigger", gamepad1.right_trigger);
             telemetry.addData("left Trigger", gamepad1.left_trigger);
             /*telemetry.addData("IntegerList", integerList);*/
