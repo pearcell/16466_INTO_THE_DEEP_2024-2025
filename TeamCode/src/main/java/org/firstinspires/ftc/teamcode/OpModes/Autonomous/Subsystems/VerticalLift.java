@@ -24,7 +24,7 @@ public class VerticalLift {
 
     public class Move implements Action {
         private boolean initialized = false;
-        private PIDController pid = new PIDController(0.002,0,0);
+        private PIDController pid = new PIDController(0.008,0,0.0001);
         private ElapsedTime timer = new ElapsedTime();
 
         @Override

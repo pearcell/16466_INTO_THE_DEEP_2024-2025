@@ -58,25 +58,13 @@ public class SPECIMEN extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        while (opModeIsActive()) {
-            //Code
-            Actions.runBlocking(
-                    new ParallelAction(
-                            lift.move(),
-                            new SequentialAction(
-                                    new ParallelAction(
-                                            path1.build(),
-                                            lift.SetSlidePos(1000),
-                                            claw.drop(lift.frontLift, 1000)
-                                    ),
-                                    new ParallelAction(
-                                            lift.SetSlidePos(0),
-                                            path2.build()
-                                    )
-                            )
-                    )
-            );
-        }
+        //Code
+        Actions.runBlocking(
+                new SequentialAction(
+                        path1.build(),
+                        path2.build()
+                )
+        );
     }
 }
 

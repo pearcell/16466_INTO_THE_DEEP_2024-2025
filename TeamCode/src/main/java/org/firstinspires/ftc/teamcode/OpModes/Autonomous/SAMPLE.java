@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 
+import com.acmerobotics.roadrunner.AngularVelConstraint;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -28,15 +31,15 @@ public class SAMPLE extends LinearOpMode {
     //initialize trajectories
         //score preloaded sample
         TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(49, 52), Math.toRadians(45)), Math.toRadians(45));
+                .splineToLinearHeading(new Pose2d(new Vector2d(57.9, 59.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
 
         //sample 1 grab
         TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-90));
+                .strafeToLinearHeading(new Vector2d(49.8, 50.6), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
 
         //sample 1 score
         TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
 
 
         //sample 2 grab
@@ -45,7 +48,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 2 score
         TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
 
         //sample 3 grab
         TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
@@ -53,7 +56,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 3 score
         TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 52), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
 
         //park next to sub for level 1 ascent
         TrajectoryActionBuilder park = score3.endTrajectory().fresh()
@@ -73,25 +76,45 @@ public class SAMPLE extends LinearOpMode {
         //Code
 
         Actions.runBlocking(
-                new SequentialAction(
-                        scorePreload.build(),
-                        new SleepAction(1),
-                        grab1.build(),
-                        new SleepAction(1),
-                        score1.build(),
-                        new SleepAction(1),
-                        grab2.build(),
-                        new SleepAction(1),
-                        score2.build(),
-                        new SleepAction(1),
-                        grab3.build(),
-                        new SleepAction(1),
-                        score3.build(),
-                        new SleepAction(1),
-                        park.build()
+                new ParallelAction(
+                        new SequentialAction(
+                                lift.SetSlidePos(3200),
+                                scorePreload.build(),
+                                claw.drop(),
+                                new SleepAction(.5),
+                                new ParallelAction(
+                                        claw.grab(),
+                                        grab1.build(),
+                                        new SequentialAction(
+                                                new SleepAction(.5),
+                                                lift.SetSlidePos(0)
+                                        )
+
+                                )
+
+                        ),
+                        lift.move()
                 )
+
         );
 
+        /*new SequentialAction(
+                scorePreload.build(),
+                new SleepAction(1),
+                grab1.build(),
+                new SleepAction(1),
+                score1.build(),
+                new SleepAction(1),
+                grab2.build(),
+                new SleepAction(1),
+                score2.build(),
+                new SleepAction(1),
+                grab3.build(),
+                new SleepAction(1),
+                score3.build(),
+                new SleepAction(1),
+                park.build()
+        ) */
         /*Actions.runBlocking(
                 new SequentialAction(
                         //score block 1

@@ -101,7 +101,7 @@ public class FieldCentric extends LinearOpMode {
         double rest = 0.48;
         double out = 0.2;
         double armclickcount = 0;
-        int armLockOut = 250;
+        int armLockOut = 300;
         int robotSlowDown = 1400;
         int upperBasket = 3200;
         double driveTrainSpeed = 1;
@@ -214,23 +214,29 @@ public class FieldCentric extends LinearOpMode {
 
 
             // down
-            if (gamepad2.left_trigger > 0 && digitalTouch.getState()) {
+            if (gamepad2.left_trigger > 0 && digitalTouch.getState() && Math.abs(frontLift.getCurrentPosition()) >= 5) {
                 frontLift.setPower(-gamepad2.left_trigger);
                 backLift.setPower(gamepad2.left_trigger);
             }
+
+            if (gamepad2.left_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < 5) {
+                frontLift.setPower(0);
+                backLift.setPower(0);
+            }
+
 
             if (!digitalTouch.getState() && gamepad2.right_trigger == 0) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
 
+
+
             // up
             if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket  ) {
                     frontLift.setPower(gamepad2.right_trigger);
                     backLift.setPower(-gamepad2.right_trigger);
             }
-
-
 
             if (Math.abs(frontLift.getCurrentPosition()) >= upperBasket) {
                 frontLift.setPower(0);

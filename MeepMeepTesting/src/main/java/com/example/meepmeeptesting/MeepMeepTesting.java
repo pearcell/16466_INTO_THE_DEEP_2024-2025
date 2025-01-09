@@ -17,11 +17,26 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.75)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(49, 52, Math.toRadians(45)))
-                .waitSeconds(1)
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-15.5, 63, Math.toRadians(-90)))
+                .strafeTo(new Vector2d(-7.7,35))
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(new Vector2d(38, 11), Math.toRadians(-90)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(25, 11), Math.toRadians(180)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-35.5, 35.5), Math.toRadians(-90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-30.5, 10), Math.toRadians(-90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-48, 10), Math.toRadians(90))
+                .lineToY(50)
+                .setTangent(Math.toRadians(90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-45, 10), Math.toRadians(-90))
+                .setTangent(Math.toRadians(-90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-59, 10), Math.toRadians(90))
+                .lineToY(50)
+                .setTangent(Math.toRadians(-90))
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-61, 10), Math.toRadians(90))
+                .lineToY(55)
 
 
 
