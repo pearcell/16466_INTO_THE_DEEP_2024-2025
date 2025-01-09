@@ -29,7 +29,7 @@ public class SPECIMEN extends LinearOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(beginPose)
                 .strafeTo(new Vector2d(-7.7,35));
 
-        TrajectoryActionBuilder path2 = drive.actionBuilder(drive.pose)
+        TrajectoryActionBuilder path2 = path1.endTrajectory().fresh()
                 .setReversed(true)
                 .splineToConstantHeading(new Vector2d(-37.5, 35.5), Math.toRadians(-90))
                 .setReversed(false)
@@ -61,16 +61,18 @@ public class SPECIMEN extends LinearOpMode {
         while (opModeIsActive()) {
             //Code
             Actions.runBlocking(
-                    new SequentialAction(
-                            new ParallelAction(
-                                path1.build(), //move to chamber
-                                lift.raise(1000, 1) //chamber height
-                            ),
-                            lift.lower(500, .5),
-                            claw.drop(lift.frontLift, 1000),
-                            new ParallelAction(
-                                path2.build(),
-                                lift.lower(100, .5)
+                    new ParallelAction(
+                            lift.move(),
+                            new SequentialAction(
+                                    new ParallelAction(
+                                            path1.build(),
+                                            lift.SetSlidePos(1000),
+                                            claw.drop(lift.frontLift, 1000)
+                                    ),
+                                    new ParallelAction(
+                                            lift.SetSlidePos(0),
+                                            path2.build()
+                                    )
                             )
                     )
             );

@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
-import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift_PIDTEST_2;
 
 @Autonomous
 public class Auto_Test extends LinearOpMode {
@@ -24,7 +23,7 @@ public class Auto_Test extends LinearOpMode {
 
         Pose2d beginPose = new Pose2d(0, 0, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-        VerticalLift_PIDTEST_2 lift = new VerticalLift_PIDTEST_2(hardwareMap);
+        VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
