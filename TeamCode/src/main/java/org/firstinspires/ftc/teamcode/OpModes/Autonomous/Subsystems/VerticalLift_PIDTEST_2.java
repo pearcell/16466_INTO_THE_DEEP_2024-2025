@@ -14,6 +14,7 @@ public class VerticalLift_PIDTEST_2 {
     public DcMotorEx frontLift;
     public DcMotorEx backLift;
     public double targetPos;
+    double f = .15;
 
 
     public VerticalLift_PIDTEST_2(HardwareMap hardwareMap) {
@@ -24,7 +25,7 @@ public class VerticalLift_PIDTEST_2 {
 
     public class Move implements Action {
         private boolean initialized = false;
-        private PIDController pid = new PIDController(0,0,0);
+        private PIDController pid = new PIDController(0.002,0,0);
         private ElapsedTime timer = new ElapsedTime();
 
         @Override
@@ -36,8 +37,8 @@ public class VerticalLift_PIDTEST_2 {
             double posBack = backLift.getCurrentPosition();
 
             //pid stuff here
-            frontLift.setPower(pid.calculate(targetPos, posFront, timer.seconds())); //front pid output
-            backLift.setPower(pid.calculate(targetPos, posBack, timer.seconds())); //back pid output
+            frontLift.setPower(pid.calculate(targetPos, posFront, timer.seconds()) + f); //front pid output
+            backLift.setPower(pid.calculate(targetPos, posBack, timer.seconds()) + f); //back pid output
 
 
             return true;

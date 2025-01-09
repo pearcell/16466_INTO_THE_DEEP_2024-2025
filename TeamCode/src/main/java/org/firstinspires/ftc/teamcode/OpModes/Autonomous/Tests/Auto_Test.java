@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Autonomous.Tests;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -42,10 +43,18 @@ public class Auto_Test extends LinearOpMode {
 
 
         Actions.runBlocking(
-                new SequentialAction(
-                        lift.SetSlidePos(500),
-                        lift.move()
+                new ParallelAction(
+                        lift.move(),
+                        new SequentialAction(
+                                lift.SetSlidePos(500),
+                                new SleepAction(5),
+                                lift.SetSlidePos(0)
+                        )
                 )
+
         );
+
+        telemetry.addData("targetPos", lift.targetPos);
+        telemetry.update();
     }
 }
