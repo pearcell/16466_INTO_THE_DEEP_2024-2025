@@ -35,7 +35,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 1 grab
         TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49.8, 50.6), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
+                .strafeToLinearHeading(new Vector2d(49.8, 51.6), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
 
         //sample 1 score
         TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
@@ -44,7 +44,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 2 grab
         TrajectoryActionBuilder grab2 = score1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-60));
+                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-66.6));
 
         //sample 2 score
         TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
@@ -52,7 +52,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 3 grab
         TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49, 46), Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(53.9, 47.7), Math.toRadians(-56.4));
 
         //sample 3 score
         TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
@@ -78,6 +78,7 @@ public class SAMPLE extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
+                                //score preload
                                 lift.SetSlidePos(3200),
                                 scorePreload.build(),
                                 claw.drop(),
@@ -89,13 +90,80 @@ public class SAMPLE extends LinearOpMode {
                                                 new SleepAction(.5),
                                                 lift.SetSlidePos(0)
                                         )
+                                ),
+                                //grab 1
+                                claw.drop(),
+                                intake.extend(),
+                                new SleepAction(1),
+                                claw.grab(),
+                                new SleepAction(1),
+                                intake.retract(),
+                                new SleepAction(1),
+                                //score 1
+                                lift.SetSlidePos(3200),
+                                new SleepAction(1),
+                                score1.build(),
+                                claw.drop(),
+                                new SleepAction(.5),
+                                new ParallelAction(
+                                        claw.grab(),
+                                        grab2.build(),
+                                        new SequentialAction(
+                                                new SleepAction(.5),
+                                                lift.SetSlidePos(0)
+                                        )
+                                ),
 
+                                //grab 2
+                                claw.drop(),
+                                intake.extend(),
+                                new SleepAction(1),
+                                claw.grab(),
+                                new SleepAction(1),
+                                intake.retract(),
+                                new SleepAction(1),
+                                //score 2
+                                lift.SetSlidePos(3200),
+                                new SleepAction(1),
+                                score2.build(),
+                                claw.drop(),
+                                new SleepAction(.5),
+                                new ParallelAction(
+                                        claw.grab(),
+                                        grab3.build(),
+                                        new SequentialAction(
+                                                new SleepAction(.5),
+                                                lift.SetSlidePos(0)
+                                        )
+                                ),
+
+                                //grab 3
+                                claw.drop(),
+                                intake.extend(),
+                                new SleepAction(1),
+                                claw.grab(),
+                                new SleepAction(1),
+                                intake.retract(),
+                                new SleepAction(1),
+                                //score 3
+                                lift.SetSlidePos(3200),
+                                new SleepAction(1),
+                                score3.build(),
+                                claw.drop(),
+                                new SleepAction(.5),
+                                new ParallelAction(
+                                        claw.grab(),
+                                        park.build(),
+                                        new SequentialAction(
+                                                new SleepAction(.5),
+                                                lift.SetSlidePos(0)
+                                        )
                                 )
-
                         ),
+
+
                         lift.move()
                 )
-
         );
 
         /*new SequentialAction(

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -30,24 +31,32 @@ public class SPECIMEN extends LinearOpMode {
                 .strafeTo(new Vector2d(-7.7,35));
 
         TrajectoryActionBuilder path2 = path1.endTrajectory().fresh()
+
+                //push 1
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(-37.5, 35.5), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-35.5, 35.5), Math.toRadians(-90)) //set
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-35.5, 0), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-30.5, 12), Math.toRadians(-90)) //turn
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-45, 0), Math.toRadians(90))
-                .lineToY(50)
+                .splineToConstantHeading(new Vector2d(-48, 12), Math.toRadians(90)) //turn
+                .lineToY(55)
+
+                //push 2
                 .setTangent(Math.toRadians(90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-45, 0), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-40, 12), Math.toRadians(-90)) //turn
                 .setTangent(Math.toRadians(-90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-56, 0), Math.toRadians(90))
-                .lineToY(50)
+                .splineToConstantHeading(new Vector2d(-58, 12), Math.toRadians(90)) //turn
+                .lineToY(55) //push
+
+                //push 3
                 .setTangent(Math.toRadians(-90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-60, 0), Math.toRadians(90))
-                .lineToY(55);
+                .splineToConstantHeading(new Vector2d(-52, 12), Math.toRadians(-90)) //turn
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-62, 12), Math.toRadians(90)) //turn
+                .lineToY(55); //push
 
 
         //don't forget to run grab() action during init to maintain possession of specimen
@@ -60,9 +69,23 @@ public class SPECIMEN extends LinearOpMode {
 
         //Code
         Actions.runBlocking(
-                new SequentialAction(
-                        path1.build(),
-                        path2.build()
+                new ParallelAction(
+                        lift.move(),
+                        new SequentialAction(
+                                new ParallelAction(
+                                        lift.SetSlidePos(1600),
+                                        path1.build()
+                                ),
+                                new SleepAction(2),
+                                lift.SetSlidePos(1500),
+                                claw.drop(),
+                                new SleepAction(.5),
+                                new ParallelAction(
+                                        claw.grab(),
+                                        lift.SetSlidePos(0),
+                                        path2.build()
+                                )
+                        )
                 )
         );
     }
