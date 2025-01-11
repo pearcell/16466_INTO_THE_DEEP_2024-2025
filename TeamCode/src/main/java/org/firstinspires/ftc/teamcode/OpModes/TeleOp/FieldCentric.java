@@ -106,13 +106,16 @@ public class FieldCentric extends LinearOpMode {
         int upperBasket = 3200;
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
-        double centricClickCount = 1;
+        double centricClickCount = 0;
+
+
+
 
         /*int lowerBasket = 8000;
         int upperBar = 9000;
         int lowerBar = 7000;
-        int scoreRange = 200;*/
-        /*double distance = 2.5;
+        int scoreRange = 200;
+        double distance = 2.5;
 
         ArrayList<Integer> integerList = new ArrayList<>();
         integerList.add(upperBasket);
@@ -143,7 +146,6 @@ public class FieldCentric extends LinearOpMode {
             }
 
             botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
@@ -176,26 +178,28 @@ public class FieldCentric extends LinearOpMode {
             }
             // field Centric
             double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+
             double frontLeftPower = (rotY + rotX + rx) / denominator;
             double backLeftPower = (rotY - rotX + rx) / denominator;
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
+
             if (currentGamepad1.y && !previousGamepad1.y) {
                // field Centric.
                 if (centricClickCount % 2 == 1) {
+                    centricClickCount = centricClickCount + 1;
                     frontLeftPower = (rotY + rotX + rx) / denominator;
                     backLeftPower = (rotY - rotX + rx) / denominator;
                     frontRightPower = (rotY - rotX - rx) / denominator;
                     backRightPower = (rotY + rotX - rx) / denominator;
-                    centricClickCount = centricClickCount + 1;
                 // robot Centric.
                 } else if (centricClickCount % 2 == 0) {
+                    centricClickCount = centricClickCount + 1;
                     frontLeftPower = (y + x + rx) / denominator;
                     backLeftPower = (y - x + rx) / denominator;
                     frontRightPower = (y - x - rx) / denominator;
                     backRightPower = (y + x - rx) / denominator;
-                    centricClickCount = centricClickCount + 1;
                 }
             }
 
@@ -233,7 +237,7 @@ public class FieldCentric extends LinearOpMode {
 
 
             // up
-            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket  ) {
+            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket) {
                     frontLift.setPower(gamepad2.right_trigger);
                     backLift.setPower(-gamepad2.right_trigger);
             }
