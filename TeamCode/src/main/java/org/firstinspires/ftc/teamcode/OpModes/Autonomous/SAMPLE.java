@@ -39,24 +39,24 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 1 score
         TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(54.9, 56.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
 
         //sample 2 grab
         TrajectoryActionBuilder grab2 = score1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-65.6));
+                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-57.6));
 
         //sample 2 score
         TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(54.9, 56.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
         //sample 3 grab
         TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(53.9, 47.7), Math.toRadians(-54.4));
+                .strafeToLinearHeading(new Vector2d(53.9, 48.7), Math.toRadians(-49.4));
 
         //sample 3 score
         TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(54.9, 56.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
         //park next to sub for level 1 ascent
         TrajectoryActionBuilder park = score3.endTrajectory().fresh()
@@ -158,7 +158,7 @@ public class SAMPLE extends LinearOpMode {
                                         park.build(),
                                         new SequentialAction(
                                                 new SleepAction(.5),
-                                                lift.SetSlidePos(0)
+                                                lift.SetSlidePos(1250)
                                         )
                                 )
                         ),
