@@ -50,8 +50,8 @@ public class FieldCentric extends LinearOpMode {
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         DcMotor frontLift = hardwareMap.dcMotor.get("frontLift");
         DcMotor backLift = hardwareMap.dcMotor.get("backLift");
-       /* Servo servoArm = hardwareMap.servo.get("ServoArm");
-        Servo servoClaw = hardwareMap.servo.get("ServoClaw");*/
+        Servo servoArm = hardwareMap.servo.get("ServoArm");
+        Servo servoClaw = hardwareMap.servo.get("ServoClaw");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         Gamepad currentGamepad1 = new Gamepad();
@@ -95,7 +95,7 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
-       /* servoArm.setPosition(.48);*/
+        servoArm.setPosition(.48);
         waitForStart();
         double closed = 0.17;
         double open = 0.05;
@@ -302,7 +302,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
 
-          /*  if (currentGamepad2.b && !previousGamepad2.b) {
+           if (currentGamepad2.b && !previousGamepad2.b) {
               // opens claw
                 if (clawclickcount % 2 == 1 ) {
                     servoClaw.setPosition(open);
@@ -334,7 +334,7 @@ public class FieldCentric extends LinearOpMode {
 
             }
 
-*/
+
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
 
             }
@@ -359,13 +359,13 @@ public class FieldCentric extends LinearOpMode {
             } else {
                 telemetry.addData("Button", "NOT PRESSED");
             }*/
-//            if (servoClaw.getPosition() == open) {
-            /*    telemetry.addData("Claw", "Open");
+            if (servoClaw.getPosition() == open) {
+            /   telemetry.addData("Claw", "Open");
             } else {
                 telemetry.addData("Claw", "closed");
             }
             telemetry.addData("Claw Position", servoClaw.getPosition());
-            telemetry.addData("Arm Position", servoArm.getPosition());*/
+            telemetry.addData("Arm Position", servoArm.getPosition());
             telemetry.addData("Claw Click Count", clawclickcount);
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
