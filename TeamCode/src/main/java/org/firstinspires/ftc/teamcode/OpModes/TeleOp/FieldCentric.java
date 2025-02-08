@@ -34,7 +34,7 @@ import java.util.Objects;
 
 @TeleOp
 public class FieldCentric extends LinearOpMode {
-    double tgtPower = 0;
+
 
     View relativeLayout;
    /* DigitalChannel digitalTouch;*/
@@ -103,12 +103,15 @@ public class FieldCentric extends LinearOpMode {
         double rest = 0.48;
         double out = 0.2;
         double armclickcount = 0;
-        int armLockOut = 300;
-        int robotSlowDown = 1400;
+
         int upperBasket = 3200;
         int upperBar = 1600;
-        int wall = 400;
+        int robotSlowDown = 1400;
         int lowHangingBar = 600;
+        int wall = 400;
+        int armLockOut = 300;
+
+
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
         double centricClickCount = 0;
@@ -119,11 +122,6 @@ public class FieldCentric extends LinearOpMode {
 
 
 
-        int lowerBasket = 8000;
-
-        int lowerBar = 7000;
-        int scoreRange = 200;
-        double distance = 2.5;
 
 
 
@@ -153,7 +151,6 @@ public class FieldCentric extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
-            tgtPower = -this.gamepad1.left_stick_y;
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -164,6 +161,8 @@ public class FieldCentric extends LinearOpMode {
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
+            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+
             previousGamepad1.copy(currentGamepad1);
             previousGamepad2.copy(currentGamepad2);
             currentGamepad1.copy(gamepad1);
@@ -179,8 +178,8 @@ public class FieldCentric extends LinearOpMode {
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
             }
-            // field Centric
-            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+
+
 
 
 
