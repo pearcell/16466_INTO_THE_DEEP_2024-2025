@@ -360,7 +360,7 @@ public class FieldCentric extends LinearOpMode {
                 telemetry.addData("Button", "NOT PRESSED");
             }*/
             if (servoClaw.getPosition() == open) {
-            /   telemetry.addData("Claw", "Open");
+              telemetry.addData("Claw", "Open");
             } else {
                 telemetry.addData("Claw", "closed");
             }
