@@ -105,6 +105,7 @@ public class FieldCentric extends LinearOpMode {
         double armclickcount = 0;
 
         int upperBasket = 3200;
+       // values need to be correctly set
         int upperBar = 1600;
         int robotSlowDown = 1400;
         int lowHangingBar = 600;
@@ -179,10 +180,6 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
 
-
-
-
-
             if (currentGamepad1.y && !previousGamepad1.y) {
                // field Centric.
                 if (centricClickCount % 2 == 1) {
@@ -192,7 +189,7 @@ public class FieldCentric extends LinearOpMode {
                     centricClickCount = centricClickCount + 1;
                 }
             }
-                // field Centric
+            // field Centric
              if (centricClickCount % 2 == 1) {
                 frontLeftPower = (rotY + rotX + rx) / denominator;
                 backLeftPower = (rotY - rotX + rx) / denominator;
@@ -209,11 +206,6 @@ public class FieldCentric extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
-
-
-
-
-
 
             // down
             if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= 5 && gamepad2.right_trigger == 0) {
@@ -254,10 +246,10 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad2.dpad_up){
                 frontLift.setTargetPosition(upperBasket);
                 backLift.setTargetPosition(upperBasket);
-                frontLift.setPower(1);
-                backLift.setPower(1);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontLift.setPower(1);
+                backLift.setPower(1);
 
             }
 
@@ -265,10 +257,11 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad2.dpad_right){
                 frontLift.setTargetPosition(upperBar);
                 backLift.setTargetPosition(upperBar);
-                frontLift.setPower(1);
-                backLift.setPower(1);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontLift.setPower(1);
+                backLift.setPower(1);
+
 
             }
 
@@ -276,20 +269,22 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad2.dpad_left){
                 frontLift.setTargetPosition(wall);
                 backLift.setTargetPosition(wall);
-                frontLift.setPower(1);
-                backLift.setPower(1);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontLift.setPower(1);
+                backLift.setPower(1);
+
             }
 
             //Dpad Down takes the lift to touch the first assention bar
             if (gamepad2.dpad_down){
                 frontLift.setTargetPosition(lowHangingBar);
                 backLift.setTargetPosition(lowHangingBar);
-                frontLift.setPower(1);
-                backLift.setPower(1);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontLift.setPower(1);
+                backLift.setPower(1);
+
 
             }
 
