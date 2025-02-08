@@ -312,7 +312,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
 
-          /*  if (currentGamepad2.b && !previousGamepad2.b) {
+            if (currentGamepad2.b && !previousGamepad2.b) {
               // opens claw
                 if (clawclickcount % 2 == 1 ) {
                     servoClaw.setPosition(open);
@@ -342,7 +342,7 @@ public class FieldCentric extends LinearOpMode {
             if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoClaw.setPosition(closed);
 
-            }*/
+            }
 
 
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
@@ -364,18 +364,18 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
             telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
             telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
-           /* if (!digitalTouch.getState()) {
+            /*if (!digitalTouch.getState()) {
                 telemetry.addData("Button", "PRESSED");
             } else {
                 telemetry.addData("Button", "NOT PRESSED");
             }*/
-           /* if (servoClaw.getPosition() == open) {
+            if (servoClaw.getPosition() == open) {
                 telemetry.addData("Claw", "Open");
             } else {
                 telemetry.addData("Claw", "closed");
             }
             telemetry.addData("Claw Position", servoClaw.getPosition());
-            telemetry.addData("Arm Position", servoArm.getPosition());*/
+            telemetry.addData("Arm Position", servoArm.getPosition());
             telemetry.addData("Claw Click Count", clawclickcount);
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
