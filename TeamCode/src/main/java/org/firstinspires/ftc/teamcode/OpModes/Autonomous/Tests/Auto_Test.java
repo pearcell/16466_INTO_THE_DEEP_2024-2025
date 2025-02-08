@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -28,23 +29,29 @@ public class Auto_Test extends LinearOpMode {
         Claw claw = new Claw(hardwareMap);
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
+        TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(57.4, 58.7), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
+
+        TrajectoryActionBuilder park = scorePreload.endTrajectory().fresh()
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(new Vector2d(38, 11), Math.toRadians(-90)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(25, 11), Math.toRadians(180)), Math.toRadians(180));
+
         telemetry.update();
         waitForStart();
+
+        Actions.runBlocking(
+                intake.retract()
+        );
 
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(
-                        lift.move(),
-                        new SequentialAction(
-                                lift.SetSlidePos(3200),
-                                new SleepAction(5),
-                                lift.SetSlidePos(0)
-                        )
+                new SequentialAction(
+                        scorePreload.build(),
+                        park.build()
                 )
+
         );
-
-
-
     }
 }

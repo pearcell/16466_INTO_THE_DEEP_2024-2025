@@ -31,7 +31,7 @@ public class SAMPLE extends LinearOpMode {
     //initialize trajectories
         //score preloaded sample
         TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(57.9, 59.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
+                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
 
         //sample 1 grab
         TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
@@ -39,24 +39,24 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 1 score
         TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
 
         //sample 2 grab
         TrajectoryActionBuilder grab2 = score1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-66.6));
+                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-57.6));
 
         //sample 2 score
         TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
         //sample 3 grab
         TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(53.9, 47.7), Math.toRadians(-56.4));
+                .strafeToLinearHeading(new Vector2d(53.9, 48.7), Math.toRadians(-49.4));
 
         //sample 3 score
         TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(57.9, 59.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(55.9, 57.2), Math.toRadians(49.3));
 
         //park next to sub for level 1 ascent
         TrajectoryActionBuilder park = score3.endTrajectory().fresh()
@@ -94,11 +94,11 @@ public class SAMPLE extends LinearOpMode {
                                 //grab 1
                                 claw.drop(),
                                 intake.extend(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 claw.grab(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 intake.retract(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 //score 1
                                 lift.SetSlidePos(3200),
                                 new SleepAction(1),
@@ -115,13 +115,14 @@ public class SAMPLE extends LinearOpMode {
                                 ),
 
                                 //grab 2
+                                new SleepAction(.5),
                                 claw.drop(),
                                 intake.extend(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 claw.grab(),
-                                new SleepAction(1),
+                                new SleepAction(.7),
                                 intake.retract(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 //score 2
                                 lift.SetSlidePos(3200),
                                 new SleepAction(1),
@@ -138,13 +139,14 @@ public class SAMPLE extends LinearOpMode {
                                 ),
 
                                 //grab 3
+                                new SleepAction(.5),
                                 claw.drop(),
                                 intake.extend(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 claw.grab(),
-                                new SleepAction(1),
+                                new SleepAction(.7),
                                 intake.retract(),
-                                new SleepAction(1),
+                                new SleepAction(.5),
                                 //score 3
                                 lift.SetSlidePos(3200),
                                 new SleepAction(1),
@@ -156,12 +158,10 @@ public class SAMPLE extends LinearOpMode {
                                         park.build(),
                                         new SequentialAction(
                                                 new SleepAction(.5),
-                                                lift.SetSlidePos(0)
+                                                lift.SetSlidePos(1250)
                                         )
                                 )
                         ),
-
-
                         lift.move()
                 )
         );

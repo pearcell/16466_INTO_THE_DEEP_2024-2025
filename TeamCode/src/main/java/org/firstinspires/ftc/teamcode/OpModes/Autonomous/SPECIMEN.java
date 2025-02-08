@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -28,35 +29,35 @@ public class SPECIMEN extends LinearOpMode {
 
         //initialize trajectories
         TrajectoryActionBuilder path1 = drive.actionBuilder(beginPose)
-                .strafeTo(new Vector2d(-7.7,35));
+                .strafeTo(new Vector2d(-7.7,33));
 
         TrajectoryActionBuilder path2 = path1.endTrajectory().fresh()
 
                 //push 1
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(-35.5, 35.5), Math.toRadians(-90)) //set
+                .splineToConstantHeading(new Vector2d(-55, 58), Math.toRadians(-90)); //set
+              /*  .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-30.5, 20), Math.toRadians(-90)) //turn
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-30.5, 12), Math.toRadians(-90)) //turn
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-48, 12), Math.toRadians(90)) //turn
-                .lineToY(55)
+                .splineToConstantHeading(new Vector2d(-48, 20), Math.toRadians(90)) //turn
+                .lineToY(52.5, new TranslationalVelConstraint(15)) */
 
                 //push 2
-                .setTangent(Math.toRadians(90))
+            /*    .setTangent(Math.toRadians(90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-40, 12), Math.toRadians(-90)) //turn
+                .splineToConstantHeading(new Vector2d(-40, 20), Math.toRadians(-90)) //turn
                 .setTangent(Math.toRadians(-90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-58, 12), Math.toRadians(90)) //turn
-                .lineToY(55) //push
+                .splineToConstantHeading(new Vector2d(-58, 20), Math.toRadians(90)) //turn
+                .lineToY(52.5); //push */
 
                 //push 3
-                .setTangent(Math.toRadians(-90))
+             /*   .setTangent(Math.toRadians(-90))
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-52, 12), Math.toRadians(-90)) //turn
+                .splineToConstantHeading(new Vector2d(-52, 20), Math.toRadians(-90)) //turn
                 .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-62, 12), Math.toRadians(90)) //turn
-                .lineToY(55); //push
+                .splineToConstantHeading(new Vector2d(-62, 20), Math.toRadians(90)) //turn
+                .lineToY(50); //push */
 
 
         //don't forget to run grab() action during init to maintain possession of specimen
@@ -73,17 +74,24 @@ public class SPECIMEN extends LinearOpMode {
                         lift.move(),
                         new SequentialAction(
                                 new ParallelAction(
-                                        lift.SetSlidePos(1600),
+                                        lift.SetSlidePos(1650),
                                         path1.build()
                                 ),
-                                new SleepAction(2),
-                                lift.SetSlidePos(1500),
+                                new SleepAction(.5),
+                                lift.SetSlidePos(1350),
+                                new SleepAction(1),
                                 claw.drop(),
                                 new SleepAction(.5),
                                 new ParallelAction(
-                                        claw.grab(),
-                                        lift.SetSlidePos(0),
-                                        path2.build()
+                                        path2.build(),
+                                        new SequentialAction(
+                                                new SleepAction(1),
+                                                new ParallelAction(
+                                                        lift.SetSlidePos(0),
+                                                        claw.grab()
+                                                )
+
+                                        )
                                 )
                         )
                 )
