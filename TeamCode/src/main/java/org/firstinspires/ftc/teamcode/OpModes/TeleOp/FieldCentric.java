@@ -78,9 +78,9 @@ public class FieldCentric extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLift.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLift.setDirection(DcMotorSimple.Direction.REVERSE);
         backLift.setDirection(DcMotorSimple.Direction.FORWARD);
         frontLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
         frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
