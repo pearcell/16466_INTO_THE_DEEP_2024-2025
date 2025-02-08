@@ -210,11 +210,7 @@ public class FieldCentric extends LinearOpMode {
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
 
-            int position = backLift.getCurrentPosition();
-            double revolutions = position;
 
-            double angle = revolutions * 360;
-            double angleNormalized = angle % 360;
 
 
 
