@@ -50,8 +50,8 @@ public class FieldCentric extends LinearOpMode {
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         DcMotor frontLift = hardwareMap.dcMotor.get("frontLift");
         DcMotor backLift = hardwareMap.dcMotor.get("backLift");
-       /* Servo servoArm = hardwareMap.servo.get("ServoArm");
-        Servo servoClaw = hardwareMap.servo.get("ServoClaw");*/
+        Servo servoArm = hardwareMap.servo.get("ServoArm");
+        Servo servoClaw = hardwareMap.servo.get("ServoClaw");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         Gamepad currentGamepad1 = new Gamepad();
@@ -78,7 +78,7 @@ public class FieldCentric extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLift.setDirection(DcMotorSimple.Direction.FORWARD);
         backLift.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -95,7 +95,7 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
-        /*servoArm.setPosition(.48);*/
+        servoArm.setPosition(.48);
         waitForStart();
         double closed = 0.17;
         double open = 0.05;
@@ -119,12 +119,12 @@ public class FieldCentric extends LinearOpMode {
 
 
 
-        /*int lowerBasket = 8000;
+        int lowerBasket = 8000;
 
         int lowerBar = 7000;
         int scoreRange = 200;
         double distance = 2.5;
-*/
+
 
 
         if (isStopRequested()) return;
@@ -193,6 +193,7 @@ public class FieldCentric extends LinearOpMode {
                     centricClickCount = centricClickCount + 1;
                 }
             }
+                // field Centric
              if (centricClickCount % 2 == 1) {
                 frontLeftPower = (rotY + rotX + rx) / denominator;
                 backLeftPower = (rotY - rotX + rx) / denominator;
@@ -231,11 +232,6 @@ public class FieldCentric extends LinearOpMode {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
-
-
-
-
-
 
             // up
             if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0) {
@@ -316,11 +312,12 @@ public class FieldCentric extends LinearOpMode {
             }
 
 
-           /* if (currentGamepad2.b && !previousGamepad2.b) {
+          /*  if (currentGamepad2.b && !previousGamepad2.b) {
+              // opens claw
                 if (clawclickcount % 2 == 1 ) {
                     servoClaw.setPosition(open);
                     clawclickcount = clawclickcount + 1;
-
+              // closes claw
                 } else if (clawclickcount % 2 == 0) {
                     servoClaw.setPosition(closed);
                     clawclickcount = clawclickcount + 1;
@@ -328,7 +325,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
             if (currentGamepad2.x && !previousGamepad2.x) {
-                //This prevents claw from extended past 250 ticks
+                //This prevents arm from extending past 250 ticks
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                     servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
@@ -341,8 +338,8 @@ public class FieldCentric extends LinearOpMode {
 
             if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
-            }*/
-           /* if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+            }
+            if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoClaw.setPosition(closed);
 
             }*/
