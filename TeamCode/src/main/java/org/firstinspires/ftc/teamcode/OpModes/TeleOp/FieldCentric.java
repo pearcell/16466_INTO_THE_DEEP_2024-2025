@@ -104,8 +104,8 @@ public class FieldCentric extends LinearOpMode {
         double out = 0.2;
         double armclickcount = 0;
 
-        int upperBasket = 4600;
-        int robotSlowDown = 1400;
+        int upperBasket = 1300;
+        int robotSlowDown = 600;
        // values need to be correctly set
         int upperBar = 2132;
         int lowHangingBar = 1550;
