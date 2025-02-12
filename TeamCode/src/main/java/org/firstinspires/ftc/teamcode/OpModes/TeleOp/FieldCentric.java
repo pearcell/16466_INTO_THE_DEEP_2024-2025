@@ -104,14 +104,19 @@ public class FieldCentric extends LinearOpMode {
         double out = 0.2;
         double armclickcount = 0;
 
-        int upperBasket = 1300;
+        int upperBasket = 1295;
+        int upperBar = 750;
         int robotSlowDown = 600;
-       // values need to be correctly set
-        int upperBar = 800;
-        int lowHangingBar = 580;
-        int wall = 240;
-        int armLockOut = 113;
+        int lowHangingBar = 545;
+        int wall = 180;
         int liftSlowDown = 115;
+        int armLockOut = 113;
+
+
+
+
+
+
 
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
@@ -208,7 +213,7 @@ public class FieldCentric extends LinearOpMode {
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
 
             // down
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= 5 && gamepad2.right_trigger == 0) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(-gamepad2.left_trigger);
@@ -221,12 +226,14 @@ public class FieldCentric extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
-                frontLift.setPower(.3 * gamepad2.left_trigger);
-                backLift.setPower(.3 * gamepad2.left_trigger);
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
+                frontLift.setPower(.5 * -gamepad2.left_trigger);
+                backLift.setPower(.5 * -gamepad2.left_trigger);
             }
 
             // up
-            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0 && frontLift.getCurrentPosition() >= liftSlowDown ) {
+            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0 ) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(gamepad2.right_trigger);
@@ -334,7 +341,7 @@ public class FieldCentric extends LinearOpMode {
             if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
-            if (Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+            if (Math.abs(frontLift.getCurrentPosition()) < 600 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
                 servoClaw.setPosition(closed);
 
             }
