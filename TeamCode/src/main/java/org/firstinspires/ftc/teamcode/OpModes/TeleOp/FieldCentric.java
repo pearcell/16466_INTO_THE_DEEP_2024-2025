@@ -78,7 +78,7 @@ public class FieldCentric extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
         // See the note about this earlier on this page.
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLift.setDirection(DcMotorSimple.Direction.REVERSE);
         backLift.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -107,11 +107,11 @@ public class FieldCentric extends LinearOpMode {
         int upperBasket = 1300;
         int robotSlowDown = 600;
        // values need to be correctly set
-        int upperBar = 2132;
-        int lowHangingBar = 1550;
-        int wall = 640;
-        int armLockOut = 300;
-
+        int upperBar = 800;
+        int lowHangingBar = 580;
+        int wall = 240;
+        int armLockOut = 113;
+        int liftSlowDown = 115;
 
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
@@ -220,8 +220,13 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);
             }
 
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
+                frontLift.setPower(.3 * gamepad2.left_trigger);
+                backLift.setPower(.3 * gamepad2.left_trigger);
+            }
+
             // up
-            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0) {
+            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0 && frontLift.getCurrentPosition() >= liftSlowDown ) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(gamepad2.right_trigger);
