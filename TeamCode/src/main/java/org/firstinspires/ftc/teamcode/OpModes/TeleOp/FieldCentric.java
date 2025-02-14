@@ -387,8 +387,8 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
             telemetry.addData("Centric Click Count", centricClickCount);
-            telemetry.addData("right Trigger", gamepad1.right_trigger);
-            telemetry.addData("left Trigger", gamepad1.left_trigger);
+            telemetry.addData("right Trigger", gamepad2.right_trigger);
+            telemetry.addData("left Trigger", gamepad2.left_trigger);
             /*telemetry.addData("IntegerList", integerList);*/
             if (centricClickCount % 2 == 0) {
                 telemetry.addData("Centric", "robot");
