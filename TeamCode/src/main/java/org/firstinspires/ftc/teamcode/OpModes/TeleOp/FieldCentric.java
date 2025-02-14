@@ -285,7 +285,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-
+                //servoClaw.setPosition(open);
             }
 
             //Dpad Down takes the lift to touch the first assention bar
@@ -299,6 +299,10 @@ public class FieldCentric extends LinearOpMode {
 
 
             }
+            // lockout test
+           /* if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 600) {
+                servoClaw.setPosition(closed);
+            }*/
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown) {
                 driveTrainSpeed = .5;
@@ -341,6 +345,7 @@ public class FieldCentric extends LinearOpMode {
             if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
+           // don't know if this is necessary
             if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
                 servoClaw.setPosition(closed);
 
