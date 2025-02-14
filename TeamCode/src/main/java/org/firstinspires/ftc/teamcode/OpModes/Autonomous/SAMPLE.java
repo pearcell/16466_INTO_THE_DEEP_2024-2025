@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
@@ -22,7 +23,7 @@ public class SAMPLE extends LinearOpMode {
     @Override
     public void runOpMode() {
         //instantiate subsystems
-        Pose2d beginPose = new Pose2d(15.5, 63, Math.toRadians(-90));
+        Pose2d beginPose = new Pose2d(15.2, 62.35, Math.toRadians(-90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
@@ -35,7 +36,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 1 grab
         TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49.8, 51.6), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
+                .strafeToLinearHeading(new Vector2d(48.5, 51.7), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
 
         //sample 1 score
         TrajectoryActionBuilder score1 = grab1.endTrajectory().fresh()
@@ -44,7 +45,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 2 grab
         TrajectoryActionBuilder grab2 = score1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(49.2, 50.3), Math.toRadians(-57.6));
+                .strafeToLinearHeading(new Vector2d(56.7, 52.5), Math.toRadians(-86));
 
         //sample 2 score
         TrajectoryActionBuilder score2 = grab2.endTrajectory().fresh()
@@ -52,7 +53,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 3 grab
         TrajectoryActionBuilder grab3 = score2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(53.9, 48.7), Math.toRadians(-49.4));
+                .strafeToLinearHeading(new Vector2d(58.1, 50.5), Math.toRadians(-65.7));
 
         //sample 3 score
         TrajectoryActionBuilder score3 = grab3.endTrajectory().fresh()
@@ -62,13 +63,17 @@ public class SAMPLE extends LinearOpMode {
         TrajectoryActionBuilder park = score3.endTrajectory().fresh()
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(new Vector2d(38, 11), Math.toRadians(-90)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(25, 11), Math.toRadians(180)), Math.toRadians(180));
+                .splineToLinearHeading(new Pose2d(new Vector2d(23, 11), Math.toRadians(180)), Math.toRadians(180));
 
 
         //don't forget to run grab() action during init to maintain possession of sample
         Actions.runBlocking(claw.grab());
         intake.servo.setPosition(.48);
+        lift.frontLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        telemetry.addData("frontLiftPos", lift.frontLift.getCurrentPosition());
+        telemetry.addData("backLiftPos", lift.backLift.getCurrentPosition());
+        telemetry.update();
         waitForStart();
 
         if (isStopRequested()) return;
@@ -79,28 +84,29 @@ public class SAMPLE extends LinearOpMode {
                 new ParallelAction(
                         new SequentialAction(
                                 //score preload
-                                lift.SetSlidePos(3200),
+                                lift.SetSlidePos(1300),
                                 scorePreload.build(),
+                                new SleepAction(1),
                                 claw.drop(),
                                 new SleepAction(.5),
                                 new ParallelAction(
                                         claw.grab(),
                                         grab1.build(),
                                         new SequentialAction(
-                                                new SleepAction(.5),
-                                                lift.SetSlidePos(0)
+                                                new SleepAction(1),
+                                                lift.SetSlidePos(-30)
                                         )
                                 ),
                                 //grab 1
                                 claw.drop(),
                                 intake.extend(),
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 claw.grab(),
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 intake.retract(),
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 //score 1
-                                lift.SetSlidePos(3200),
+                                lift.SetSlidePos(1300),
                                 new SleepAction(1),
                                 score1.build(),
                                 claw.drop(),
@@ -109,22 +115,22 @@ public class SAMPLE extends LinearOpMode {
                                         claw.grab(),
                                         grab2.build(),
                                         new SequentialAction(
-                                                new SleepAction(.5),
-                                                lift.SetSlidePos(0)
+                                                new SleepAction(1),
+                                                lift.SetSlidePos(-30)
                                         )
                                 ),
 
                                 //grab 2
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 claw.drop(),
                                 intake.extend(),
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 claw.grab(),
-                                new SleepAction(.7),
+                                new SleepAction(1),
                                 intake.retract(),
-                                new SleepAction(.5),
+                                new SleepAction(1),
                                 //score 2
-                                lift.SetSlidePos(3200),
+                                lift.SetSlidePos(1300),
                                 new SleepAction(1),
                                 score2.build(),
                                 claw.drop(),
@@ -133,8 +139,8 @@ public class SAMPLE extends LinearOpMode {
                                         claw.grab(),
                                         grab3.build(),
                                         new SequentialAction(
-                                                new SleepAction(.5),
-                                                lift.SetSlidePos(0)
+                                                new SleepAction(1),
+                                                lift.SetSlidePos(-40)
                                         )
                                 ),
 
@@ -148,7 +154,7 @@ public class SAMPLE extends LinearOpMode {
                                 intake.retract(),
                                 new SleepAction(.5),
                                 //score 3
-                                lift.SetSlidePos(3200),
+                                lift.SetSlidePos(1300),
                                 new SleepAction(1),
                                 score3.build(),
                                 claw.drop(),
@@ -157,91 +163,13 @@ public class SAMPLE extends LinearOpMode {
                                         claw.grab(),
                                         park.build(),
                                         new SequentialAction(
-                                                new SleepAction(.5),
-                                                lift.SetSlidePos(1250)
+                                                new SleepAction(1),
+                                                lift.SetSlidePos(490)
                                         )
                                 )
                         ),
                         lift.move()
                 )
         );
-
-        /*new SequentialAction(
-                scorePreload.build(),
-                new SleepAction(1),
-                grab1.build(),
-                new SleepAction(1),
-                score1.build(),
-                new SleepAction(1),
-                grab2.build(),
-                new SleepAction(1),
-                score2.build(),
-                new SleepAction(1),
-                grab3.build(),
-                new SleepAction(1),
-                score3.build(),
-                new SleepAction(1),
-                park.build()
-        ) */
-        /*Actions.runBlocking(
-                new SequentialAction(
-                        //score block 1
-                        new ParallelAction(
-                                score.build(),
-                                lift.raise(1000, .5),
-                                claw.drop(lift.frontLift, 1500)
-                        ),
-                        //score block 2
-                        new ParallelAction(
-                                grab1.build(),
-                                lift.lower(0, .5),
-                                intake.extend(lift.frontLift, 50)
-                        ),
-                        new ParallelAction(
-                                claw.grab(),
-                                intake.retract()
-                        ),
-                        new ParallelAction(
-                                score.build(),
-                                lift.raise(1000, 1),
-                                claw.drop(lift.frontLift, 1500)
-                        ),
-                        //score block 3
-                        new ParallelAction(
-                                grab2.build(),
-                                lift.lower(0, .5),
-                                intake.extend(lift.frontLift, 50)
-                        ),
-                        new ParallelAction(
-                                claw.grab(),
-                                intake.retract()
-                        ),
-                        new ParallelAction(
-                                score.build(),
-                                lift.raise(1000, 1),
-                                claw.drop(lift.frontLift, 1500)
-                        ),
-                        //score block 4
-                        new ParallelAction(
-                                grab3.build(),
-                                lift.lower(0, .5),
-                                intake.extend(lift.frontLift, 50)
-                        ),
-                        new ParallelAction(
-                                claw.grab(),
-                                intake.retract()
-                        ),
-                        new ParallelAction(
-                                score.build(),
-                                lift.raise(1000, 1),
-                                claw.drop(lift.frontLift, 1500)
-                        ),
-                        //score park
-                        new ParallelAction(
-                                park.build(),
-                                lift.lower(400, .5)
-                        )
-                )
-        ); */
     }
 }

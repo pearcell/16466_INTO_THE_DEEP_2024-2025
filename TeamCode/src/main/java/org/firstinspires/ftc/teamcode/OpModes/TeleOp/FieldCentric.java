@@ -108,7 +108,7 @@ public class FieldCentric extends LinearOpMode {
         int upperBar = 750;
         int robotSlowDown = 600;
         int lowHangingBar = 545;
-        int wall = 180;
+        int wall = 170;
         int liftSlowDown = 500;
         int armLockOut = 113;
 
@@ -341,7 +341,7 @@ public class FieldCentric extends LinearOpMode {
             if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
-            if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
+            if (Math.abs(frontLift.getCurrentPosition()) < 1200 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
                 servoClaw.setPosition(closed);
 
             }

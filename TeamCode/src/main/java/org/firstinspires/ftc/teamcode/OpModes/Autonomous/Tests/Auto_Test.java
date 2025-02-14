@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autonomous.Tests;
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -23,19 +25,28 @@ public class Auto_Test extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        Pose2d beginPose = new Pose2d(15.5, 63, Math.toRadians(-90));
+        Pose2d beginPose = new Pose2d(15.2, 62.35, Math.toRadians(-90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
-        TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(57.4, 58.7), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
 
-        TrajectoryActionBuilder park = scorePreload.endTrajectory().fresh()
-                .setReversed(true)
-                .splineToSplineHeading(new Pose2d(new Vector2d(38, 11), Math.toRadians(-90)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(25, 11), Math.toRadians(180)), Math.toRadians(180));
+
+        //score preloaded sample
+        /* TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20)); */
+        Action scorePreload = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20))
+                .build();
+
+        Action grab1 = drive.actionBuilder(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)))
+                .strafeToLinearHeading(new Vector2d(47, 51.7), Math.toRadians(-90))
+                .build();
+        //sample 1 grab
+       /* TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(47, 51.7), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90))); */
+
 
         telemetry.update();
         waitForStart();
@@ -47,10 +58,16 @@ public class Auto_Test extends LinearOpMode {
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new SequentialAction(
-                        scorePreload.build(),
-                        park.build()
+                new ParallelAction(
+                        new SequentialAction(
+                                claw.grab(),
+                                lift.SetSlidePos(1300),
+                                new SleepAction(5),
+                                lift.SetSlidePos(0)
+                        ),
+                        lift.move()
                 )
+
 
         );
     }

@@ -17,10 +17,10 @@ public class Tune_PID extends LinearOpMode {
     public DcMotorEx frontLift;
     public DcMotorEx backLift;
     public static double targetPos = 100;
-    public static double p = 0.002;
+    public static double p = 0.0001;
     public static double i = 0;
     public static double d = 0;
-    public static double f = .15;
+    public static double f = 0;
     public boolean started = true;
 
     @Override
@@ -28,7 +28,7 @@ public class Tune_PID extends LinearOpMode {
 
         frontLift = hardwareMap.get(DcMotorEx.class, "frontLift");
         backLift = hardwareMap.get(DcMotorEx.class, "backLift");
-        backLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         PIDController pid = new PIDController(p, i, d);
         ElapsedTime timer = new ElapsedTime();
@@ -46,7 +46,7 @@ public class Tune_PID extends LinearOpMode {
             double posFront = frontLift.getCurrentPosition();
             double posBack = backLift.getCurrentPosition();
 
-            if (posFront > 3250) {
+            if (posFront > 1300) {
                 requestOpModeStop();
             }
 
