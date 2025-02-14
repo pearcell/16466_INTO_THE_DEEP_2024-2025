@@ -108,7 +108,7 @@ public class FieldCentric extends LinearOpMode {
         int upperBar = 750;
         int robotSlowDown = 600;
         int lowHangingBar = 545;
-        int wall = 170;
+        int wall = 180;
         int liftSlowDown = 500;
         int armLockOut = 113;
 
@@ -285,7 +285,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-
+                //servoClaw.setPosition(open);
             }
 
             //Dpad Down takes the lift to touch the first assention bar
@@ -299,6 +299,10 @@ public class FieldCentric extends LinearOpMode {
 
 
             }
+            // lockout test
+           /* if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 600) {
+                servoClaw.setPosition(closed);
+            }*/
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown) {
                 driveTrainSpeed = .5;
@@ -338,10 +342,11 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
 
-            if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
+           /* if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
-            }
-            if (Math.abs(frontLift.getCurrentPosition()) < 1200 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
+            }*/
+           // don't know if this is necessary
+            if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
                 servoClaw.setPosition(closed);
 
             }
@@ -382,8 +387,8 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Drive Train Speed", driveTrainSpeed);
             telemetry.addData("Centric Click Count", centricClickCount);
-            telemetry.addData("right Trigger", gamepad1.right_trigger);
-            telemetry.addData("left Trigger", gamepad1.left_trigger);
+            telemetry.addData("right Trigger", gamepad2.right_trigger);
+            telemetry.addData("left Trigger", gamepad2.left_trigger);
             /*telemetry.addData("IntegerList", integerList);*/
             if (centricClickCount % 2 == 0) {
                 telemetry.addData("Centric", "robot");
