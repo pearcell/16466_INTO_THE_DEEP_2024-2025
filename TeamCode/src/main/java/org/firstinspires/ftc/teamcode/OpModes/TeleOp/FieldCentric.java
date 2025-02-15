@@ -95,22 +95,22 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
-        servoArm.setPosition(.48);
+        servoArm.setPosition(.7);
         waitForStart();
         double closed = 0.17;
         double open = 0.05;
         double clawclickcount = 0;
-        double rest = 0.48;
-        double out = 0.2;
+        double rest = 0.7;
+        double out = 0.4;
         double armclickcount = 0;
 
         int upperBasket = 1295;
-        int upperBar = 750;
+        int upperSpecimenBar = 750;
         int robotSlowDown = 600;
         int lowHangingBar = 545;
         int wall = 180;
         int liftSlowDown = 500;
-        int armLockOut = 113;
+        int armLockOut = 300;
 
 
 
@@ -267,8 +267,8 @@ public class FieldCentric extends LinearOpMode {
 
             // Dpad Right takes lift to the upper specimen bar
             if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
-                frontLift.setTargetPosition(upperBar);
-                backLift.setTargetPosition(upperBar);
+                frontLift.setTargetPosition(upperSpecimenBar);
+                backLift.setTargetPosition(upperSpecimenBar);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
