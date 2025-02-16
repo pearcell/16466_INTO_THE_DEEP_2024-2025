@@ -196,16 +196,17 @@ public class FieldCentric extends LinearOpMode {
             }
             // field Centric
              if (centricClickCount % 2 == 1) {
-                frontLeftPower = (rotY + rotX + rx) / denominator;
-                backLeftPower = (rotY - rotX + rx) / denominator;
-                frontRightPower = (rotY - rotX - rx) / denominator;
-                backRightPower = (rotY + rotX - rx) / denominator;
-                // robot Centric.
-            } else if (centricClickCount % 2 == 0) {
                  frontLeftPower = (y + x + rx) / denominator;
                  backLeftPower = (y - x + rx) / denominator;
                  frontRightPower = (y - x - rx) / denominator;
                  backRightPower = (y + x - rx) / denominator;
+                // robot Centric.
+            } else if (centricClickCount % 2 == 0) {
+
+                 frontLeftPower = (rotY + rotX + rx) / denominator;
+                 backLeftPower = (rotY - rotX + rx) / denominator;
+                 frontRightPower = (rotY - rotX - rx) / denominator;
+                 backRightPower = (rotY + rotX - rx) / denominator;
              }
             frontLeftMotor.setPower(frontLeftPower * driveTrainSpeed);
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
