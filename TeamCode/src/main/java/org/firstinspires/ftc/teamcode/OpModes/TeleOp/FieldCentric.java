@@ -392,9 +392,9 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("left Trigger", gamepad2.left_trigger);
             /*telemetry.addData("IntegerList", integerList);*/
             if (centricClickCount % 2 == 0) {
-                telemetry.addData("Centric", "robot");
-            } else {
                 telemetry.addData("Centric", "field");
+            } else {
+                telemetry.addData("Centric", "robot");
             }
 
             if (frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
