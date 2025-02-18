@@ -95,6 +95,7 @@ public class FieldCentric extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
+        // Can this be removed
         servoArm.setPosition(.7);
         waitForStart();
         double closed = 0.17;
@@ -112,12 +113,6 @@ public class FieldCentric extends LinearOpMode {
         int liftSlowDown = 500;
         int armLockOut = 300;
 
-
-
-
-
-
-
         double driveTrainSpeed = 1;
         double driveTrainClickCount = 0;
         double centricClickCount = 0;
@@ -125,11 +120,6 @@ public class FieldCentric extends LinearOpMode {
         double backLeftPower = 0;
         double frontRightPower = 0;
         double backRightPower = 0;
-
-
-
-
-
 
         if (isStopRequested()) return;
        /* PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
@@ -202,12 +192,12 @@ public class FieldCentric extends LinearOpMode {
                  backRightPower = (y + x - rx) / denominator;
                 // robot Centric.
             } else if (centricClickCount % 2 == 0) {
-
                  frontLeftPower = (rotY + rotX + rx) / denominator;
                  backLeftPower = (rotY - rotX + rx) / denominator;
                  frontRightPower = (rotY - rotX - rx) / denominator;
                  backRightPower = (rotY + rotX - rx) / denominator;
              }
+
             frontLeftMotor.setPower(frontLeftPower * driveTrainSpeed);
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
@@ -274,8 +264,6 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-
-
             }
 
             // Dpad Left takes the lift to the human player wall
@@ -286,8 +274,16 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-                //servoClaw.setPosition(open);
             }
+
+            /*if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
+               clawclickcount = 0;
+            }
+
+            if (frontLift.getCurrentPosition() > 90 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && armclickcount % 2 == 1){
+                armclickcount = 0;
+            }*/
+
 
             //Dpad Down takes the lift to touch the first assention bar
             if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
@@ -297,13 +293,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-
-
             }
-            // lockout test
-           /* if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 600) {
-                servoClaw.setPosition(closed);
-            }*/
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown) {
                 driveTrainSpeed = .5;
@@ -317,6 +307,18 @@ public class FieldCentric extends LinearOpMode {
             if (gamepad1.start) {
                 imu.resetYaw();
             }
+           /* if (currentGamepad2.b && !previousGamepad2.b) {
+                if (clawclickcount % 2 == 1 ) {
+                    clawclickcount = clawclickcount + 1;
+                }  else if (clawclickcount % 2 == 0) {
+                    clawclickcount = clawclickcount + 1;
+                }
+            }
+            if (clawclickcount % 2 == 1 ) {
+                servoClaw.setPosition(open);
+            } else if (clawclickcount % 2 == 0) {
+                servoClaw.setPosition(closed);
+            }*/
 
 
            if (currentGamepad2.b && !previousGamepad2.b) {
@@ -330,6 +332,19 @@ public class FieldCentric extends LinearOpMode {
                     clawclickcount = clawclickcount + 1;
                 }
             }
+
+            /*if (currentGamepad2.x && !previousGamepad2.x) {
+                if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+                    armclickcount = armclickcount + 1;
+                } else if (armclickcount % 2 == 0 ) {
+                    armclickcount = armclickcount + 1;
+                }
+            }
+            if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+                servoArm.setPosition(out);
+            }else if (armclickcount % 2 == 0 ) {
+                servoArm.setPosition(rest);
+            }*/
 
             if (currentGamepad2.x && !previousGamepad2.x) {
                 //This prevents arm from extending past 250 ticks
@@ -361,50 +376,42 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addLine(String.format("R %3d, G %3d, B %3d", Color.red(result.rgb), Color.green(result.rgb), Color.blue(result.rgb)));*/
             telemetry.addData("yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
             /*telemetry.addData("Distance Sensor", dsensor.getDistance(DistanceUnit.INCH));*/
-            telemetry.addData("front Left Motor", frontLeftMotor.getPower());
-            telemetry.addData("front Right Motor", frontRightMotor.getPower());
-            telemetry.addData("back Left Motor", backLeftMotor.getPower());
-            telemetry.addData("back Right Motor", backRightMotor.getPower());
-            telemetry.addData("back Lift", backLift.getPower());
-            telemetry.addData("front Lift", frontLift.getPower());
-            telemetry.addData("back Lift Pos", backLift.getCurrentPosition());
-            telemetry.addData("front Lift Pos", frontLift.getCurrentPosition());
-            telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
-            telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
-            telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
-            /*if (!digitalTouch.getState()) {
-                telemetry.addData("Button", "PRESSED");
-            } else {
-                telemetry.addData("Button", "NOT PRESSED");
-            }*/
-            if (servoClaw.getPosition() == open) {
-              telemetry.addData("Claw", "Open");
-            } else {
-                telemetry.addData("Claw", "closed");
-            }
-            telemetry.addData("Claw Position", servoClaw.getPosition());
-            telemetry.addData("Arm Position", servoArm.getPosition());
-            telemetry.addData("Claw Click Count", clawclickcount);
-            telemetry.addData("Drive Train Click Count", driveTrainClickCount);
-            telemetry.addData("Drive Train Speed", driveTrainSpeed);
-            telemetry.addData("Centric Click Count", centricClickCount);
-            telemetry.addData("right Trigger", gamepad2.right_trigger);
-            telemetry.addData("left Trigger", gamepad2.left_trigger);
-            /*telemetry.addData("IntegerList", integerList);*/
             if (centricClickCount % 2 == 0) {
                 telemetry.addData("Centric", "field");
             } else {
                 telemetry.addData("Centric", "robot");
             }
-
+            if (servoClaw.getPosition() == open) {
+                telemetry.addData("Claw", "Open");
+            } else {
+                telemetry.addData("Claw", "closed");
+            }
+            telemetry.addData("back Lift Pos", backLift.getCurrentPosition());
+            telemetry.addData("front Lift Pos", frontLift.getCurrentPosition());
+            telemetry.addData("Drive Train Speed", driveTrainSpeed);
+            telemetry.addData("Claw Click Count", clawclickcount);
+            telemetry.addData("arm Click Count", armclickcount);
+            telemetry.addData("right Trigger", gamepad2.right_trigger);
+            telemetry.addData("left Trigger", gamepad2.left_trigger);
+            telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
+            telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
+            telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
+            telemetry.addData("Claw Position", servoClaw.getPosition());
+            telemetry.addData("Arm Position", servoArm.getPosition());
+            telemetry.addData("Drive Train Click Count", driveTrainClickCount);
+            telemetry.addData("Centric Click Count", centricClickCount);
+            telemetry.addData("back Lift", backLift.getPower());
+            telemetry.addData("front Lift", frontLift.getPower());
             if (frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
                 telemetry.addData("RunMode", "RUN_WITHOUT_ENCODER");
             } else {
                 telemetry.addData("RunMode", "RUN_TO_POSITION");
             }
+            telemetry.addData("front Left Motor", frontLeftMotor.getPower());
+            telemetry.addData("front Right Motor", frontRightMotor.getPower());
+            telemetry.addData("back Left Motor", backLeftMotor.getPower());
+            telemetry.addData("back Right Motor", backRightMotor.getPower());
             telemetry.update();
-
-
         }
 
     }
