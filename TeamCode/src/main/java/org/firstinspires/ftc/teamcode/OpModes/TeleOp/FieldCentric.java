@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.util.Size;
 import android.view.View;
-import java.util.ArrayList;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,10 +17,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-
-
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -34,10 +29,7 @@ import java.util.Objects;
 
 @TeleOp
 public class FieldCentric extends LinearOpMode {
-
-
     View relativeLayout;
-   /* DigitalChannel digitalTouch;*/
     double botHeading = 0;
 
 
@@ -135,6 +127,7 @@ public class FieldCentric extends LinearOpMode {
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "dsensor"))
                 .build();*/
+
         while (opModeIsActive()) {
 
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0) {
@@ -163,6 +156,20 @@ public class FieldCentric extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+           /*if (currentGamepad1.a && !previousGamepad1.a) {
+                if (driveTrainClickCount % 2 == 1 ) {
+                    driveTrainClickCount = driveTrainClickCount + 1;
+
+                }else if (driveTrainClickCount % 2 == 0) {
+                    driveTrainClickCount = driveTrainClickCount + 1;
+                }
+            }
+            if (driveTrainClickCount % 2 == 1 ) {
+                driveTrainSpeed = 1;
+            } else if (driveTrainClickCount % 2 == 0) {
+                driveTrainSpeed = .5;
+            }*/
+
             if (currentGamepad1.a && !previousGamepad1.a) {
                 if (driveTrainClickCount % 2 == 1 ) {
                    driveTrainSpeed = 1;
@@ -183,13 +190,13 @@ public class FieldCentric extends LinearOpMode {
                     centricClickCount = centricClickCount + 1;
                 }
             }
-            // field Centric
+              // robot Centric.
              if (centricClickCount % 2 == 1) {
                  frontLeftPower = (y + x + rx) / denominator;
                  backLeftPower = (y - x + rx) / denominator;
                  frontRightPower = (y - x - rx) / denominator;
                  backRightPower = (y + x - rx) / denominator;
-                // robot Centric.
+                 // field Centric
             } else if (centricClickCount % 2 == 0) {
                  frontLeftPower = (rotY + rotX + rx) / denominator;
                  backLeftPower = (rotY - rotX + rx) / denominator;
@@ -201,9 +208,11 @@ public class FieldCentric extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
-
-
-            /*double liftHalfSpeed = (Math.ceil(frontLift.getCurrentPosition() % liftSlowDown)) % 2;
+           /*
+            // round liftSlowDown
+            double round = (Math.ceil(frontLift.getCurrentPosition() % liftSlowDown)) % 2;
+           // Sets 1.5 to 1
+            double liftHalfSpeed = round - .5 * (Math.ceil(Math.ceil(round - 1)));
 
             if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
@@ -211,7 +220,7 @@ public class FieldCentric extends LinearOpMode {
                 frontLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
                 backLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
             }*/
-            // down
+            //down
             if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
@@ -219,7 +228,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(-gamepad2.left_trigger);
             }
 
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < 5) {
+          if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < 5) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
@@ -265,7 +274,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
             // Dpad Right takes lift to the upper specimen bar
-            if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
+          if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
                 frontLift.setTargetPosition(upperSpecimenBar);
                 backLift.setTargetPosition(upperSpecimenBar);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -292,7 +301,7 @@ public class FieldCentric extends LinearOpMode {
                 armclickcount = 0;
             }*/
 
-            //Is this necessary
+            /**Is this necessary*/
             //Dpad Down takes the lift to touch the first assention bar
             if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
                 frontLift.setTargetPosition(lowHangingBar);
@@ -372,7 +381,6 @@ public class FieldCentric extends LinearOpMode {
            // don't know if this is necessary
             if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
                 servoClaw.setPosition(closed);
-
             }
 
 
