@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.util.Size;
 import android.view.View;
+
+import com.acmerobotics.roadrunner.Internal;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,6 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 
+import java.io.BufferedReader;
 import java.util.List;
 import java.util.Objects;
 
@@ -111,7 +114,6 @@ public class FieldCentric extends LinearOpMode {
         double frontRightPower = 0;
         double backRightPower = 0;
 
-
         if (isStopRequested()) return;
        /* PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
@@ -191,7 +193,7 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
               // robot Centric.
-             if (centricClickCount % 2 == 1) {
+            if (centricClickCount % 2 == 1) {
                  frontLeftPower = (y + x + rx) / denominator;
                  backLeftPower = (y - x + rx) / denominator;
                  frontRightPower = (y - x - rx) / denominator;
@@ -202,7 +204,7 @@ public class FieldCentric extends LinearOpMode {
                  backLeftPower = (rotY - rotX + rx) / denominator;
                  frontRightPower = (rotY - rotX - rx) / denominator;
                  backRightPower = (rotY + rotX - rx) / denominator;
-             }
+            }
 
             frontLeftMotor.setPower(frontLeftPower * driveTrainSpeed);
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
@@ -228,7 +230,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(-gamepad2.left_trigger);
             }
 
-          if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < 5) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < 5) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
@@ -270,11 +272,10 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 frontLift.setPower(1);
                 backLift.setPower(1);
-
             }
 
             // Dpad Right takes lift to the upper specimen bar
-          if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
+            if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
                 frontLift.setTargetPosition(upperSpecimenBar);
                 backLift.setTargetPosition(upperSpecimenBar);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -339,16 +340,16 @@ public class FieldCentric extends LinearOpMode {
 
 
            if (currentGamepad2.b && !previousGamepad2.b) {
-              // opens claw
-                if (clawclickcount % 2 == 1 ) {
+               // opens claw
+               if (clawclickcount % 2 == 1 ) {
                     servoClaw.setPosition(open);
                     clawclickcount = clawclickcount + 1;
-              // closes claw
-                } else if (clawclickcount % 2 == 0) {
+               // closes claw
+               } else if (clawclickcount % 2 == 0) {
                     servoClaw.setPosition(closed);
                     clawclickcount = clawclickcount + 1;
-                }
-            }
+               }
+           }
 
             /*if (currentGamepad2.x && !previousGamepad2.x) {
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
@@ -368,7 +369,6 @@ public class FieldCentric extends LinearOpMode {
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                     servoArm.setPosition(out);
                     armclickcount = armclickcount + 1;
-
                 } else if (armclickcount % 2 == 0 ) {
                     servoArm.setPosition(rest);
                     armclickcount = armclickcount + 1;
