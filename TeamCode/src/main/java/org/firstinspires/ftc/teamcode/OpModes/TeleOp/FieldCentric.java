@@ -302,10 +302,12 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(1);
             }*/
 
-            /*if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1) {
+            /*if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
                 scoreMacroLock = 2;
                 frontLift.setPower(0);
                 backLift.setPower(0);
+            } else if (scoreMacroLock == 2 && servoClaw.getPosition() == open) {
+                scoreMacroLock =1;
             }*/
 
             if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
