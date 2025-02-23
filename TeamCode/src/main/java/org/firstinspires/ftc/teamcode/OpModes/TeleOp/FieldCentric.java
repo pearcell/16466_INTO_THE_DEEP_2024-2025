@@ -281,7 +281,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
             // Dpad Left takes the lift to the human player wall
-            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0) {
+            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0/* && scoreMacroLock < 2*/) {
                 scoreMacroLock = 0;
                 clawclickcount = 0;
                 frontLift.setTargetPosition(wall);
