@@ -259,7 +259,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(0);
             }
             // Dpad Up takes the lift to upper basket
-            if (gamepad2.dpad_up && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0) {
+            if (gamepad2.dpad_up && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && servoArm.getPosition() == rest) {
                 scoreMacroLock = 0;
                 frontLift.setTargetPosition(upperBasket);
                 backLift.setTargetPosition(upperBasket);
@@ -355,6 +355,7 @@ public class FieldCentric extends LinearOpMode {
                 servoArm.setPosition(rest);
             } /*else {
                 servoArm.setPosition(.65);
+                armclickcount = 0;
             }*/
 
 
