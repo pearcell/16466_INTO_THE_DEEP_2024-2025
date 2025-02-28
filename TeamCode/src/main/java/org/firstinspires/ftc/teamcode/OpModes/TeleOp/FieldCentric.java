@@ -174,6 +174,9 @@ public class FieldCentric extends LinearOpMode {
                 driveTrainSpeed = 1;
             }
 
+            if(frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getCurrentPosition() < liftSlowDown) {
+               driveTrainClickCount = 0;
+            }
 
 
             if (currentGamepad1.y && !previousGamepad1.y) {
@@ -216,7 +219,7 @@ public class FieldCentric extends LinearOpMode {
                 backLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
             }*/
             //down
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0 /*&& scoreMacroLock < 2*/) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0 && scoreMacroLock < 2) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(-gamepad2.left_trigger);
@@ -237,7 +240,7 @@ public class FieldCentric extends LinearOpMode {
 
             // up
             if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0) {
-                //scoreMacroLock = 1;
+                scoreMacroLock = 1;
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(gamepad2.right_trigger);
@@ -293,13 +296,9 @@ public class FieldCentric extends LinearOpMode {
                 armclickcount = 0;
             }
 
-            /*if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0) {
-                frontLift.setTargetPosition(specimenScoringMacro);
-                backLift.setTargetPosition(specimenScoringMacro);
-                frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                frontLift.setPower(1);
-                backLift.setPower(1);
+            /*if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0){
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }*/
 
             /*if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
@@ -307,7 +306,7 @@ public class FieldCentric extends LinearOpMode {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             } else if (scoreMacroLock == 2 && servoClaw.getPosition() == open) {
-                scoreMacroLock =1;
+                scoreMacroLock = 1;
             }*/
 
             if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
@@ -316,9 +315,9 @@ public class FieldCentric extends LinearOpMode {
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown && driveTrainClickCount % 2 == 0) {
                 driveTrainClickCount = driveTrainClickCount + 1;
-            } /*else if (Math.abs(frontLift.getCurrentPosition()) <= robotSlowDown && driveTrainClickCount % 2 == 1 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+            } else if (Math.abs(frontLift.getCurrentPosition()) <= robotSlowDown && driveTrainClickCount % 2 == 1 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
                 driveTrainClickCount = 0;
-            }*/
+            }
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
@@ -339,9 +338,6 @@ public class FieldCentric extends LinearOpMode {
                 servoClaw.setPosition(closed);
             }
 
-
-
-
             if (currentGamepad2.x && !previousGamepad2.x) {
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                     armclickcount = armclickcount + 1;
@@ -357,7 +353,6 @@ public class FieldCentric extends LinearOpMode {
                 servoArm.setPosition(.65);
                 armclickcount = 0;
             }*/
-
 
            /* if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
@@ -411,6 +406,7 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("front Right Motor", frontRightMotor.getPower());
             telemetry.addData("back Left Motor", backLeftMotor.getPower());
             telemetry.addData("back Right Motor", backRightMotor.getPower());
+            telemetry.addData("scoreMacroLock", scoreMacroLock);
             telemetry.update();
         }
     }
