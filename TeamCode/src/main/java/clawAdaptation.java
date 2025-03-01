@@ -1,37 +1,21 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
-
-
-import android.app.Activity;
-import android.graphics.Color;
-import android.util.Size;
 import android.view.View;
-
-import com.acmerobotics.roadrunner.Internal;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.opencv.ImageRegion;
-import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 
-import java.io.BufferedReader;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import java.util.List;
-import java.util.Objects;
 
 @TeleOp
-public class FieldCentric extends LinearOpMode {
+public class clawAdaptation extends LinearOpMode {
     View relativeLayout;
     double botHeading = 0;
 
@@ -46,7 +30,8 @@ public class FieldCentric extends LinearOpMode {
         DcMotor frontLift = hardwareMap.dcMotor.get("frontLift");
         DcMotor backLift = hardwareMap.dcMotor.get("backLift");
         Servo servoArm = hardwareMap.servo.get("ServoArm");
-        Servo servoClaw = hardwareMap.servo.get("ServoClaw");
+        Servo servoClawGrab = hardwareMap.servo.get("ServoClawGrab");
+        Servo servoClawRotate = hardwareMap.servo.get("ServoClawRotate");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         Gamepad currentGamepad1 = new Gamepad();
@@ -92,11 +77,13 @@ public class FieldCentric extends LinearOpMode {
         imu.resetYaw();
         // Can this be removed
         waitForStart();
-
-        final double closed = 0.17;
-        final double open = 0.05;
+        servoClawRotate.setPosition(.5);
+        double rotation = .5;
+        double rotateClickCount = 1;
+        final double closed = .5;
+        final double open = 0;
         double clawclickcount = 0;
-        final double rest = 0.7;
+        final double rest = 0.73;
         final double out = 0.4;
         double armclickcount = 0;
         final int upperBasket = 1295;
@@ -159,7 +146,7 @@ public class FieldCentric extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-           if (currentGamepad1.a && !previousGamepad1.a) {
+            if (currentGamepad1.a && !previousGamepad1.a) {
                 if (driveTrainClickCount % 2 == 1 ) {
                     driveTrainClickCount = driveTrainClickCount + 1;
 
@@ -309,7 +296,7 @@ public class FieldCentric extends LinearOpMode {
 
 
             if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
-               clawclickcount = 0;
+                clawclickcount = 0;
             }
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown && driveTrainClickCount % 2 == 0) {
@@ -331,9 +318,35 @@ public class FieldCentric extends LinearOpMode {
                 }
             }
             if (clawclickcount % 2 == 1) {
-                servoClaw.setPosition(open);
+                servoClawGrab.setPosition(closed);
             } else if (clawclickcount % 2 == 0) {
-                servoClaw.setPosition(closed);
+                servoClawGrab.setPosition(open);
+            }
+
+            if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper && rotation > .2) {
+                if (rotateClickCount % 2 == 1) {
+                    rotateClickCount = rotateClickCount + 1;
+                    rotation = rotation - .1;
+                } else if (clawclickcount % 2 == 0) {
+                    rotateClickCount = rotateClickCount + 1;
+                    rotation = rotation - .1;
+                }
+            }
+
+            if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper && rotation < .8) {
+                if (rotateClickCount % 2 == 1) {
+                    rotateClickCount = rotateClickCount + 1;
+                    rotation = rotation + .1;
+                } else if (clawclickcount % 2 == 0) {
+                    rotateClickCount = rotateClickCount + 1;
+                    rotation = rotation + .1;
+                }
+            }
+            if (servoArm.getPosition() == rest){
+               servoClawRotate.setPosition(.5);
+               rotation = .5;
+            } else if (servoArm.getPosition() == out) {
+                servoClawRotate.setPosition(rotation);
             }
 
             if (currentGamepad2.x && !previousGamepad2.x) {
@@ -343,7 +356,7 @@ public class FieldCentric extends LinearOpMode {
                     armclickcount = armclickcount + 1;
                 }
             }
-            if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
+            if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() < armLockOut) {
                 servoArm.setPosition(out);
             }else if (armclickcount % 2 == 0 /*&& frontLift.getCurrentPosition() < 1200*/) {
                 servoArm.setPosition(rest);
@@ -374,10 +387,10 @@ public class FieldCentric extends LinearOpMode {
             } else {
                 telemetry.addData("Centric", "robot");
             }
-            if (servoClaw.getPosition() == open) {
-                telemetry.addData("Claw", "Open");
-            } else {
+            if (servoClawGrab.getPosition() == open) {
                 telemetry.addData("Claw", "closed");
+            } else {
+                telemetry.addData("Claw", "open");
             }
             telemetry.addData("back Lift Pos", backLift.getCurrentPosition());
             telemetry.addData("front Lift Pos", frontLift.getCurrentPosition());
@@ -389,7 +402,7 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
             telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
             telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
-            telemetry.addData("Claw Position", servoClaw.getPosition());
+            telemetry.addData("Claw Position", servoClawGrab.getPosition());
             telemetry.addData("Arm Position", servoArm.getPosition());
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Centric Click Count", centricClickCount);
@@ -405,10 +418,19 @@ public class FieldCentric extends LinearOpMode {
             telemetry.addData("back Left Motor", backLeftMotor.getPower());
             telemetry.addData("back Right Motor", backRightMotor.getPower());
             telemetry.addData("scoreMacroLock", scoreMacroLock);
+            telemetry.addData("Claw Rotate Position", servoClawRotate.getPosition());
+            telemetry.addData("rotateClickCount", rotateClickCount);
+            telemetry.addData("rotation", rotation);
+            if (servoArm.getPosition() == .7) {
+                telemetry.addData("arm", "Rest");
+            } else {
+                telemetry.addData("arm", "Out");
+            }
             telemetry.update();
         }
     }
 }
+
 
 
 
