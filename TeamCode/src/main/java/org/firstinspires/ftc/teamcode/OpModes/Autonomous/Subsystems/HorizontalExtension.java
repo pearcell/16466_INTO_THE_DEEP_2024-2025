@@ -17,7 +17,7 @@ public class HorizontalExtension {
     public class Extend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            servo.setPosition(.2);
+            servo.setPosition(.4);
             return false;
         }
     }
@@ -29,7 +29,7 @@ public class HorizontalExtension {
     public class Retract implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            servo.setPosition(.48);
+            servo.setPosition(.7);
             return false;
         }
     }

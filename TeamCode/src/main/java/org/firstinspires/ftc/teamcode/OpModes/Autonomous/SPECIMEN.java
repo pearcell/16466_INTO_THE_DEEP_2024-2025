@@ -31,6 +31,11 @@ public class SPECIMEN extends LinearOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(beginPose)
                 .strafeTo(new Vector2d(-7.7,33));
 
+        TrajectoryActionBuilder park = path1.endTrajectory().fresh()
+                .strafeTo(new Vector2d(-7.7,33))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(-55, 60), Math.toRadians(90));
+
         TrajectoryActionBuilder path2 = path1.endTrajectory().fresh()
 
                 //push 1
@@ -62,7 +67,7 @@ public class SPECIMEN extends LinearOpMode {
 
         //don't forget to run grab() action during init to maintain possession of specimen
         Actions.runBlocking(claw.grab());
-        intake.servo.setPosition(.48);
+        intake.servo.setPosition(.7);
 
         waitForStart();
 
@@ -74,23 +79,23 @@ public class SPECIMEN extends LinearOpMode {
                         lift.move(),
                         new SequentialAction(
                                 new ParallelAction(
-                                        lift.SetSlidePos(1650),
+                                        lift.SetSlidePos(670),
                                         path1.build()
                                 ),
                                 new SleepAction(.5),
-                                lift.SetSlidePos(1350),
+                                lift.SetSlidePos(550),
                                 new SleepAction(1),
                                 claw.drop(),
                                 new SleepAction(.5),
                                 new ParallelAction(
-                                        path2.build(),
+                                        park.build(),
                                         new SequentialAction(
-                                                new SleepAction(1),
-                                                new ParallelAction(
-                                                        lift.SetSlidePos(0),
-                                                        claw.grab()
-                                                )
-
+                                                new SleepAction(.2),
+                                                claw.grab()
+                                        ),
+                                        new SequentialAction(
+                                                new SleepAction(.5),
+                                                lift.SetSlidePos(-20)
                                         )
                                 )
                         )

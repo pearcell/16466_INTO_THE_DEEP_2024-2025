@@ -34,11 +34,11 @@ public class Auto_Test extends LinearOpMode {
 
 
         //score preloaded sample
-        /* TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20)); */
-        Action scorePreload = drive.actionBuilder(beginPose)
+         TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
+     /*   Action scorePreload = drive.actionBuilder(beginPose)
                 .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20))
-                .build();
+                .build(); */
 
         Action grab1 = drive.actionBuilder(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)))
                 .strafeToLinearHeading(new Vector2d(47, 51.7), Math.toRadians(-90))
@@ -62,6 +62,7 @@ public class Auto_Test extends LinearOpMode {
                         new SequentialAction(
                                 claw.grab(),
                                 lift.SetSlidePos(1300),
+                                scorePreload.build(),
                                 new SleepAction(5),
                                 lift.SetSlidePos(0)
                         ),
