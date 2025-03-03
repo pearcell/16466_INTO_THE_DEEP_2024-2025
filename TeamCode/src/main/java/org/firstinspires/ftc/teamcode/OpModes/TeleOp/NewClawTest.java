@@ -10,15 +10,16 @@ public class NewClawTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Servo servoSwivel = hardwareMap.servo.get("swivel");
         Servo servoClaw = hardwareMap.servo.get("claw");
 
         Gamepad currentGamepad2 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
-        double closed = 0;
-        double open = .35;
+        double closed = .5;
+        double open = 0;
         double clawclickcount = 0;
+        double test1 = .3;
+        double test2 = .2;
 
         double swivelPosition = 0;
 
@@ -31,12 +32,12 @@ public class NewClawTest extends LinearOpMode {
 
             if (gamepad2.b) {
                 // opens claw
-                servoClaw.setPosition(open);
+                servoClaw.setPosition(test1);
             }
 
             if (gamepad2.x) {
                 //closes claw
-                servoClaw.setPosition(closed);
+                servoClaw.setPosition(test2);
             }
 
             if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper && swivelPosition <= 1) {
@@ -45,10 +46,10 @@ public class NewClawTest extends LinearOpMode {
                 swivelPosition -= .1;
             }
 
-            servoSwivel.setPosition(swivelPosition);
+
 
             telemetry.addData("swivel Pos", swivelPosition);
-            telemetry.addData("servo Swivel actual pos", servoSwivel.getPosition());
+
             telemetry.addData("Claw Position", servoClaw.getPosition());
             telemetry.update();
         }

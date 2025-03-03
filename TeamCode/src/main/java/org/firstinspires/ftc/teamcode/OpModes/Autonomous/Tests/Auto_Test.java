@@ -16,8 +16,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.FourBarClaw;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Swivel;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.FourBarClaw;
 
 @TeleOp
 public class Auto_Test extends LinearOpMode {
@@ -28,48 +31,41 @@ public class Auto_Test extends LinearOpMode {
         Pose2d beginPose = new Pose2d(15.2, 62.35, Math.toRadians(-90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
-        Claw claw = new Claw(hardwareMap);
+        FourBarClaw claw = new FourBarClaw(hardwareMap);
+        Swivel swivel = new Swivel(hardwareMap);
         HorizontalExtension intake = new HorizontalExtension(hardwareMap);
 
-
-
+        //initialize trajectories
         //score preloaded sample
-         TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
-     /*   Action scorePreload = drive.actionBuilder(beginPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20))
-                .build(); */
+        TrajectoryActionBuilder scorePreload = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(57.9, 59.2), Math.toRadians(49.3)), Math.toRadians(45), new TranslationalVelConstraint(20));
 
-        Action grab1 = drive.actionBuilder(new Pose2d(new Vector2d(56.9, 58.2), Math.toRadians(49.3)))
-                .strafeToLinearHeading(new Vector2d(47, 51.7), Math.toRadians(-90))
-                .build();
         //sample 1 grab
-       /* TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(47, 51.7), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90))); */
+        TrajectoryActionBuilder grab1 = scorePreload.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(48.5, 52.7), Math.toRadians(-90), new AngularVelConstraint(Math.toRadians(90)));
+
+        //prebuild
+        Action scorePreloadFinal = scorePreload.build();
+        Action grab1Final = grab1.build();
 
 
-        telemetry.update();
+
+
         waitForStart();
 
         Actions.runBlocking(
                 intake.retract()
         );
 
+        Actions.runBlocking(swivel.turn(.5));
+
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-                new ParallelAction(
-                        new SequentialAction(
-                                claw.grab(),
-                                lift.SetSlidePos(1300),
-                                scorePreload.build(),
-                                new SleepAction(5),
-                                lift.SetSlidePos(0)
-                        ),
-                        lift.move()
+                new SequentialAction(
+                    scorePreloadFinal,
+                    grab1Final
                 )
-
-
         );
     }
 }

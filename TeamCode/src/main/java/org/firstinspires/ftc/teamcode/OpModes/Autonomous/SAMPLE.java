@@ -78,7 +78,6 @@ public class SAMPLE extends LinearOpMode {
         if (isStopRequested()) return;
 
         //Code
-
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
