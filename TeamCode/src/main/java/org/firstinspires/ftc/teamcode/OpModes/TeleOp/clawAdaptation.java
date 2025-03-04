@@ -322,32 +322,13 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper && rotation > .2) {
-               /* if (rotateClickCount % 2 == 1) {
-                    rotateClickCount = rotateClickCount + 1;
                     rotation = rotation - .1;
-                } else if (clawclickcount % 2 == 0) {
-                    rotateClickCount = rotateClickCount + 1;*/
-                    rotation = rotation - .1;
-                /*}*/
             }
 
 
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper && rotation < .8) {
-                /*if (rotateClickCount % 2 == 1) {
-                    rotateClickCount = rotateClickCount + 1;
                     rotation = rotation + .1;
-                } else if (clawclickcount % 2 == 0) {
-                    rotateClickCount = rotateClickCount + 1;*/
-                    rotation = rotation + .1;
-               /*}*/
             }
-
-            /*if (servoArm.getPosition() == rest){
-               servoClawRotate.setPosition(.5);
-               rotation = .5;
-            } else if (servoArm.getPosition() == out) {
-                servoClawRotate.setPosition(rotation);
-            }*/
 
             if (servoArm.getPosition() == rest){
                 rotation = .5;
@@ -425,7 +406,7 @@ public class clawAdaptation extends LinearOpMode {
             telemetry.addData("rotation", rotation);
             if (servoArm.getPosition() == .7) {
                 telemetry.addData("arm", "Rest");
-            } else {
+            } else if (servoArm.getPosition() == .4) {
                 telemetry.addData("arm", "Out");
             }
             telemetry.update();
