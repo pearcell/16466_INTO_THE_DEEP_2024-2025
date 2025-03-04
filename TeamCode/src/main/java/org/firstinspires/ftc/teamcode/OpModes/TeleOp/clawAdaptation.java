@@ -77,7 +77,7 @@ public class clawAdaptation extends LinearOpMode {
         imu.initialize(parameters);
         imu.resetYaw();
         waitForStart();
-        servoClawRotate.setPosition(.5);
+
         double rotation = .5;
         double rotateClickCount = 1;
         final double closed = .5;
@@ -103,6 +103,8 @@ public class clawAdaptation extends LinearOpMode {
         double backRightPower = 0;
 
         if (isStopRequested()) return;
+        servoClawRotate.setPosition(.5);
+        servoArm.setPosition(.7);
        /* PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
                 .setSwatches(
@@ -117,9 +119,7 @@ public class clawAdaptation extends LinearOpMode {
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "dsensor"))
                 .build();*/
-        do {
-            servoArm.setPosition(.7);
-        } while (opModeIsActive()); {
+         while (opModeIsActive()) {
 
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0) {
                 imu.initialize(parameters);
