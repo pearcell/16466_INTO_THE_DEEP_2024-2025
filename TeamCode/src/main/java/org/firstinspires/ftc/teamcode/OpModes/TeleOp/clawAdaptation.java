@@ -91,7 +91,7 @@ public class clawAdaptation extends LinearOpMode {
         final int robotSlowDown = 600;
         final int specimenScoringMacro = 540;
         int scoreMacroLock = 0;
-        final int wall = 180;
+        final int wall = 108;
         final int liftSlowDown = 500;
         final int armLockOut = 300;
         double driveTrainSpeed = 1;
@@ -155,12 +155,14 @@ public class clawAdaptation extends LinearOpMode {
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
             }
-            if (driveTrainClickCount % 2 == 1 ) {
+            if (driveTrainClickCount % 2 == 1 || servoArm.getPosition() == out) {
                 driveTrainSpeed = .4;
             } else if (driveTrainClickCount % 2 == 0) {
                 driveTrainSpeed = 1;
             }
-
+            /* if(servoArm.getPosition() == out) {
+                 driveTrainClickCount = 1;
+             }*/
 
 
 
@@ -320,24 +322,26 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper && rotation > .2) {
-                if (rotateClickCount % 2 == 1) {
+               /* if (rotateClickCount % 2 == 1) {
                     rotateClickCount = rotateClickCount + 1;
                     rotation = rotation - .1;
                 } else if (clawclickcount % 2 == 0) {
-                    rotateClickCount = rotateClickCount + 1;
+                    rotateClickCount = rotateClickCount + 1;*/
                     rotation = rotation - .1;
-                }
+                /*}*/
             }
 
+
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper && rotation < .8) {
-                if (rotateClickCount % 2 == 1) {
+                /*if (rotateClickCount % 2 == 1) {
                     rotateClickCount = rotateClickCount + 1;
                     rotation = rotation + .1;
                 } else if (clawclickcount % 2 == 0) {
-                    rotateClickCount = rotateClickCount + 1;
+                    rotateClickCount = rotateClickCount + 1;*/
                     rotation = rotation + .1;
-                }
+               /*}*/
             }
+
             /*if (servoArm.getPosition() == rest){
                servoClawRotate.setPosition(.5);
                rotation = .5;
@@ -355,9 +359,7 @@ public class clawAdaptation extends LinearOpMode {
                 driveTrainClickCount = 0;
             }
 
-            if(servoArm.getPosition() == out) {
-                driveTrainClickCount = 1;
-            }
+
 
 
             if (currentGamepad2.x && !previousGamepad2.x) {
