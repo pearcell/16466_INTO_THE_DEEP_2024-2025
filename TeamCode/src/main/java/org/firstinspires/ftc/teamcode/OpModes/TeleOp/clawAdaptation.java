@@ -87,9 +87,9 @@ public class clawAdaptation extends LinearOpMode {
         final double out = 0.4;
         double armclickcount = 0;
         final int upperBasket = 1295;
-        final int upperSpecimenBar = 650;
+        final int upperSpecimenBar = 540;
         final int robotSlowDown = 600;
-        final int specimenScoringMacro = 540;
+        final int specimenScoringMacro = 650;
         int scoreMacroLock = 0;
         final int wall = 108;
         final int liftSlowDown = 500;
@@ -206,7 +206,7 @@ public class clawAdaptation extends LinearOpMode {
                 backLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
             }*/
             //down
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0 && scoreMacroLock < 2) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(-gamepad2.left_trigger);
@@ -218,7 +218,7 @@ public class clawAdaptation extends LinearOpMode {
                 backLift.setPower(0);
             }
 
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0&& scoreMacroLock < 2) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(.5 * -gamepad2.left_trigger);
@@ -226,7 +226,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // up
-            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0) {
+            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
                 scoreMacroLock = 1;
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
@@ -288,7 +288,7 @@ public class clawAdaptation extends LinearOpMode {
             }*/
 
 
-            /*if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
+            /*if (gamepad2.right_trigger > 0 && gamepad2.left_trigger == 0 && frontLift.getCurrentPosition() >= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
                 scoreMacroLock = 2;
                 frontLift.setPower(0);
                 backLift.setPower(0);
