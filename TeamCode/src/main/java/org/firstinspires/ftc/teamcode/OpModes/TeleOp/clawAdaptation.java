@@ -76,7 +76,6 @@ public class clawAdaptation extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
-        // Can this be removed
         waitForStart();
         servoClawRotate.setPosition(.5);
         double rotation = .5;
@@ -118,8 +117,9 @@ public class clawAdaptation extends LinearOpMode {
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "dsensor"))
                 .build();*/
-
-        while (opModeIsActive()) {
+        do {
+            servoArm.setPosition(.7);
+        } while (opModeIsActive()); {
 
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0) {
                 imu.initialize(parameters);
@@ -156,7 +156,7 @@ public class clawAdaptation extends LinearOpMode {
                 }
             }
             if (driveTrainClickCount % 2 == 1 ) {
-                driveTrainSpeed = .5;
+                driveTrainSpeed = .4;
             } else if (driveTrainClickCount % 2 == 0) {
                 driveTrainSpeed = 1;
             }
@@ -295,10 +295,6 @@ public class clawAdaptation extends LinearOpMode {
             }*/
 
 
-            if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
-                clawclickcount = 0;
-            }
-
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown && driveTrainClickCount % 2 == 0) {
                 driveTrainClickCount = driveTrainClickCount + 1;
             } else if(frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getCurrentPosition() < liftSlowDown) {
@@ -355,6 +351,14 @@ public class clawAdaptation extends LinearOpMode {
 
             servoClawRotate.setPosition(rotation);
 
+            if (frontLift.getCurrentPosition() < 600 && frontLift.getCurrentPosition() > 500){
+                driveTrainClickCount = 0;
+            }
+
+            if(servoArm.getPosition() == out) {
+                driveTrainClickCount = 1;
+            }
+
 
             if (currentGamepad2.x && !previousGamepad2.x) {
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
@@ -363,23 +367,12 @@ public class clawAdaptation extends LinearOpMode {
                     armclickcount = armclickcount + 1;
                 }
             }
+
             if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() < armLockOut) {
                 servoArm.setPosition(out);
-            }else if (armclickcount % 2 == 0 /*&& frontLift.getCurrentPosition() < 1200*/) {
-                servoArm.setPosition(rest);
-            } /*else {
-                servoArm.setPosition(.65);
-                armclickcount = 0;
-            }*/
-
-           /* if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
+            }else if (armclickcount % 2 == 0) {
                 servoArm.setPosition(rest);
             }
-            // don't know if this is necessary
-            if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
-                servoClaw.setPosition(closed);
-            }*/
-
 
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
 
