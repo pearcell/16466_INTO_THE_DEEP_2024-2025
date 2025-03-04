@@ -226,7 +226,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // up
-            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
+            if (gamepad2.right_trigger > 0 && Math.abs(frontLift.getCurrentPosition()) < upperBasket && gamepad2.left_trigger == 0) {
                 scoreMacroLock = 1;
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
@@ -260,7 +260,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // Dpad Right takes lift to the upper specimen bar
-            if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && servoArm.getPosition() == rest) {
+            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && servoArm.getPosition() == rest) {
                 frontLift.setTargetPosition(upperSpecimenBar);
                 backLift.setTargetPosition(upperSpecimenBar);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -271,7 +271,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // Dpad Left takes the lift to the human player wall
-            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
+            if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
                 scoreMacroLock = 0;
                 frontLift.setTargetPosition(wall);
                 backLift.setTargetPosition(wall);
@@ -288,13 +288,13 @@ public class clawAdaptation extends LinearOpMode {
             }*/
 
 
-            /*if (gamepad2.right_trigger > 0 && gamepad2.left_trigger == 0 && frontLift.getCurrentPosition() >= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
-                scoreMacroLock = 2;
-                frontLift.setPower(0);
-                backLift.setPower(0);
-            } else if (scoreMacroLock == 2 && servoClaw.getPosition() == open) {
-                scoreMacroLock = 1;
-            }*/
+            if (gamepad2.dpad_right && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClawGrab.getPosition() == closed) {
+                frontLift.setPower(1);
+                backLift.setPower(1);
+            } else if(gamepad2.dpad_right && frontLift.getCurrentPosition() > specimenScoringMacro && servoClawGrab.getPosition() == closed) {
+                 frontLift.setPower(0);
+                 backLift.setPower(0);
+            }
 
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown && driveTrainClickCount % 2 == 0) {
