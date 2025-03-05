@@ -89,7 +89,7 @@ public class clawAdaptation extends LinearOpMode {
         final int upperBasket = 1295;
         final int upperSpecimenBar = 540;
         final int robotSlowDown = 600;
-        final int specimenScoringMacro = 650;
+        final int specimenScoringMacro = 775;
         int scoreMacroLock = 0;
         final int wall = 108;
         final int liftSlowDown = 500;
