@@ -193,18 +193,7 @@ public class clawAdaptation extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
-           /*
-            // round liftSlowDown
-            double round = (Math.ceil(frontLift.getCurrentPosition() % liftSlowDown)) % 2;
-           // Sets 1.5 to 1
-            double liftHalfSpeed = round - .5 * (Math.ceil(Math.ceil(round - 1)));
 
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
-                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
-                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
-                frontLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
-                backLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
-            }*/
             //down
             if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
@@ -234,12 +223,12 @@ public class clawAdaptation extends LinearOpMode {
                 backLift.setPower(gamepad2.right_trigger);
             }
 
-            if (Math.abs(frontLift.getCurrentPosition()) >= upperBasket && gamepad2.right_trigger > 0) {
+            if (frontLift.getCurrentPosition() >= upperBasket && gamepad2.right_trigger > 0) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
 
-            if (gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            if (gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER && !gamepad2.dpad_right) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
@@ -270,7 +259,7 @@ public class clawAdaptation extends LinearOpMode {
                 scoreMacroLock = 1;
             }
 
-            // Dpad Left takes the lift to the human player wall
+            // Dpad Down takes the lift to the human player wall
             if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
                 scoreMacroLock = 0;
                 frontLift.setTargetPosition(wall);
@@ -282,16 +271,16 @@ public class clawAdaptation extends LinearOpMode {
                 armclickcount = 0;
             }
 
-            /*if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0){
+            if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0){
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }*/
+            }
 
 
-            if (gamepad2.dpad_right && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClawGrab.getPosition() == closed) {
+            if (gamepad2.dpad_right && frontLift.getCurrentPosition() <= specimenScoringMacro) {
                 frontLift.setPower(1);
                 backLift.setPower(1);
-            } else if(gamepad2.dpad_right && frontLift.getCurrentPosition() > specimenScoringMacro && servoClawGrab.getPosition() == closed) {
+            } else if(gamepad2.dpad_right && frontLift.getCurrentPosition() > specimenScoringMacro) {
                  frontLift.setPower(0);
                  backLift.setPower(0);
             }
