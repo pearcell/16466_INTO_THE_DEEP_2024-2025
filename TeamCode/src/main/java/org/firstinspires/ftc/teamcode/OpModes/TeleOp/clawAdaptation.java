@@ -260,7 +260,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // Dpad Down takes the lift to the human player wall
-            if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
+            if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0) {
                 scoreMacroLock = 0;
                 frontLift.setTargetPosition(wall);
                 backLift.setTargetPosition(wall);
@@ -271,7 +271,7 @@ public class clawAdaptation extends LinearOpMode {
                 armclickcount = 0;
             }
 
-            if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0){
+            if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
