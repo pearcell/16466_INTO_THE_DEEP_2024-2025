@@ -271,17 +271,16 @@ public class clawAdaptation extends LinearOpMode {
                 armclickcount = 0;
             }
 
-            if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0) {
-                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-
 
             if (gamepad2.dpad_right && frontLift.getCurrentPosition() <= specimenScoringMacro) {
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 frontLift.setPower(1);
                 backLift.setPower(1);
             } else if(gamepad2.dpad_right && frontLift.getCurrentPosition() > specimenScoringMacro) {
-                 frontLift.setPower(0);
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                frontLift.setPower(0);
                  backLift.setPower(0);
             }
 
