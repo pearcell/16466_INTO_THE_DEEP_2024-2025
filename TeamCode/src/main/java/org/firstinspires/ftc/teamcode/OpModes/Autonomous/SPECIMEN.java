@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -13,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.Claw;
-import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtension;
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.HorizontalExtensionOLD;
 import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Subsystems.VerticalLift;
 
 @Autonomous
@@ -25,7 +24,7 @@ public class SPECIMEN extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         VerticalLift lift = new VerticalLift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
-        HorizontalExtension intake = new HorizontalExtension(hardwareMap);
+        HorizontalExtensionOLD intake = new HorizontalExtensionOLD(hardwareMap);
 
         //initialize trajectories
         TrajectoryActionBuilder path1 = drive.actionBuilder(beginPose)

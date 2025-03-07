@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.OpModes.Autonomous.Tests.Auto_Test;
+
 public class Swivel {
     private Servo swivelServo;
 
@@ -23,6 +25,7 @@ public class Swivel {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+
             swivelServo.setPosition(pos3);
             return false;
         }
@@ -30,5 +33,19 @@ public class Swivel {
 
     public Action turn(double pos1) {
         return new Turn(pos1);
+    }
+
+    public class TurnCV implements Action {
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+
+            swivelServo.setPosition(Auto_Test.angleCVTest);
+            return false;
+        }
+    }
+
+    public Action turnCV() {
+        return new TurnCV();
     }
 }

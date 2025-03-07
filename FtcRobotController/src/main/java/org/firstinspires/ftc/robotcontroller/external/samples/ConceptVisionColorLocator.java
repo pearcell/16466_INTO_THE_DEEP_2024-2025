@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import android.graphics.Color;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -33,8 +34,10 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
+import org.firstinspires.ftc.vision.opencv.ColorSpace;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.opencv.core.RotatedRect;
+import org.opencv.core.Scalar;
 
 import java.util.List;
 
@@ -60,7 +63,7 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Disabled
+
 @TeleOp(name = "Concept: Vision Color-Locator", group = "Concept")
 public class ConceptVisionColorLocator extends LinearOpMode
 {
@@ -107,13 +110,18 @@ public class ConceptVisionColorLocator extends LinearOpMode
          *                                    object, such as when removing noise from an image.
          *                                    "pixels" in the range of 2-4 are suitable for low res images.
          */
+
         ColorBlobLocatorProcessor colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.BLUE)         // use a predefined color match
+                .setTargetColorRange(ColorRange.RED)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
-                .setRoi(ImageRegion.asUnityCenterCoordinates(-0.5, 0.5, 0.5, -0.5))  // search central 1/4 of camera view
+                .setRoi(ImageRegion.asImageCoordinates(0, 0, 320, 240))  // search central 1/4 of camera view
                 .setDrawContours(true)                        // Show contours on the Stream Preview
                 .setBlurSize(5)                               // Smooth the transitions between different colors in image
                 .build();
+
+        ColorBlobLocatorProcessor.BlobFilter areaFilter = new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 1000, 20000);
+
+        colorLocator.addFilter(areaFilter);
 
         /*
          * Build a vision portal to run the Color Locator process.
@@ -173,6 +181,28 @@ public class ConceptVisionColorLocator extends LinearOpMode
              *     ColorBlobLocatorProcessor.Util.sortByDensity(SortOrder.DESCENDING, blobs);
              *     ColorBlobLocatorProcessor.Util.sortByAspectRatio(SortOrder.DESCENDING, blobs);
              */
+
+            org.opencv.core.Size myBoxFitSize;
+            for(ColorBlobLocatorProcessor.Blob b : blobs)
+            {
+                RotatedRect boxFit = b.getBoxFit();
+                myBoxFitSize = boxFit.size;
+                double angle = boxFit.angle;
+                double servoPos;
+
+
+                if (myBoxFitSize.width > myBoxFitSize.height) {
+                    angle = angle + 90;
+                }
+
+                servoPos = ((-0.7 / 180) * angle) + .85;
+
+
+                telemetry.addData("width", myBoxFitSize.width);
+                telemetry.addData("height", myBoxFitSize.height);
+                telemetry.addData("angle", angle);
+                telemetry.addData("servoPos", servoPos);
+            }
 
             telemetry.addLine(" Area Density Aspect  Center");
 
