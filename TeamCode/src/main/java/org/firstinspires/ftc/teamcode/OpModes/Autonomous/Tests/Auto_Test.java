@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.RaceAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -72,16 +71,6 @@ public class Auto_Test extends LinearOpMode {
                                 new SleepAction(1),
                                 intake.retract(.3),
                                 forward.build(),
-                                new RaceAction(
-                                        new SequentialAction(
-                                                scan1.build(),
-                                                scan2.build()
-                                        ),
-                                        new SequentialAction(
-                                                new SleepAction(1),
-                                                vision.scan()
-                                        )
-                                ),
                                 vision.updatePose(),
                                 swivel.turnCV(),
                                 new SleepAction(1),
