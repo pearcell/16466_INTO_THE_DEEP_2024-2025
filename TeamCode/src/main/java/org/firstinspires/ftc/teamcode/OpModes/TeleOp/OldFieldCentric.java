@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
+
+
 import android.view.View;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,7 +20,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import java.util.List;
 
 @TeleOp
-public class clawAdaptation extends LinearOpMode {
+@Disabled
+public class OldFieldCentric extends LinearOpMode {
     View relativeLayout;
     double botHeading = 0;
 
@@ -31,8 +36,7 @@ public class clawAdaptation extends LinearOpMode {
         DcMotor frontLift = hardwareMap.dcMotor.get("frontLift");
         DcMotor backLift = hardwareMap.dcMotor.get("backLift");
         Servo servoArm = hardwareMap.servo.get("ServoArm");
-        Servo servoClawGrab = hardwareMap.servo.get("ServoClawGrab");
-        Servo servoClawRotate = hardwareMap.servo.get("ServoClawRotate");
+        Servo servoClaw = hardwareMap.servo.get("ServoClaw");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         Gamepad currentGamepad1 = new Gamepad();
@@ -76,22 +80,21 @@ public class clawAdaptation extends LinearOpMode {
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
         imu.resetYaw();
+        // Can this be removed
         waitForStart();
 
-        double rotation = .5;
-        double rotateClickCount = 1;
-        final double closed = .5;
-        final double open = 0;
+        final double closed = 0.17;
+        final double open = 0.05;
         double clawclickcount = 0;
-        final double rest = 0.73;
+        final double rest = 0.7;
         final double out = 0.4;
         double armclickcount = 0;
         final int upperBasket = 1295;
-        final int upperSpecimenBar = 540;
+        final int upperSpecimenBar = 650;
         final int robotSlowDown = 600;
-        final int specimenScoringMacro = 775;
+        final int specimenScoringMacro = 540;
         int scoreMacroLock = 0;
-        final int wall = 108;
+        final int wall = 180;
         final int liftSlowDown = 500;
         final int armLockOut = 300;
         double driveTrainSpeed = 1;
@@ -103,8 +106,6 @@ public class clawAdaptation extends LinearOpMode {
         double backRightPower = 0;
 
         if (isStopRequested()) return;
-        servoClawRotate.setPosition(.5);
-        servoArm.setPosition(.7);
        /* PredominantColorProcessor colorRangeSensor = new PredominantColorProcessor.Builder()
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
                 .setSwatches(
@@ -119,7 +120,8 @@ public class clawAdaptation extends LinearOpMode {
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "dsensor"))
                 .build();*/
-         while (opModeIsActive()) {
+
+        while (opModeIsActive()) {
 
             if (imu.getRobotYawPitchRollAngles().getAcquisitionTime() == 0) {
                 imu.initialize(parameters);
@@ -147,7 +149,7 @@ public class clawAdaptation extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            if (currentGamepad1.a && !previousGamepad1.a) {
+           if (currentGamepad1.a && !previousGamepad1.a) {
                 if (driveTrainClickCount % 2 == 1 ) {
                     driveTrainClickCount = driveTrainClickCount + 1;
 
@@ -155,14 +157,12 @@ public class clawAdaptation extends LinearOpMode {
                     driveTrainClickCount = driveTrainClickCount + 1;
                 }
             }
-            if (driveTrainClickCount % 2 == 1 || servoArm.getPosition() == out) {
-                driveTrainSpeed = .4;
+            if (driveTrainClickCount % 2 == 1 ) {
+                driveTrainSpeed = .5;
             } else if (driveTrainClickCount % 2 == 0) {
                 driveTrainSpeed = 1;
             }
-            /* if(servoArm.getPosition() == out) {
-                 driveTrainClickCount = 1;
-             }*/
+
 
 
 
@@ -193,9 +193,20 @@ public class clawAdaptation extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower * driveTrainSpeed);
             frontRightMotor.setPower(frontRightPower * driveTrainSpeed);
             backRightMotor.setPower(backRightPower * driveTrainSpeed);
+           /*
+            // round liftSlowDown
+            double round = (Math.ceil(frontLift.getCurrentPosition() % liftSlowDown)) % 2;
+           // Sets 1.5 to 1
+            double liftHalfSpeed = round - .5 * (Math.ceil(Math.ceil(round - 1)));
 
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
+                frontLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
+                backLift.setPower(liftHalfSpeed * -gamepad2.left_trigger);
+            }*/
             //down
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() >= liftSlowDown && gamepad2.right_trigger == 0 && scoreMacroLock < 2) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(-gamepad2.left_trigger);
@@ -207,7 +218,7 @@ public class clawAdaptation extends LinearOpMode {
                 backLift.setPower(0);
             }
 
-            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0) {
+            if (gamepad2.left_trigger > 0 && frontLift.getCurrentPosition() < liftSlowDown && frontLift.getCurrentPosition() > 5 && gamepad2.right_trigger == 0&& scoreMacroLock < 2) {
                 frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Turn the motor back on when we are done
                 frontLift.setPower(.5 * -gamepad2.left_trigger);
@@ -223,12 +234,12 @@ public class clawAdaptation extends LinearOpMode {
                 backLift.setPower(gamepad2.right_trigger);
             }
 
-            if (frontLift.getCurrentPosition() >= upperBasket && gamepad2.right_trigger > 0) {
+            if (Math.abs(frontLift.getCurrentPosition()) >= upperBasket && gamepad2.right_trigger > 0) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
 
-            if (gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER && !gamepad2.dpad_right) {
+            if (gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && frontLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
                 frontLift.setPower(0);
                 backLift.setPower(0);
             }
@@ -249,7 +260,7 @@ public class clawAdaptation extends LinearOpMode {
             }
 
             // Dpad Right takes lift to the upper specimen bar
-            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && servoArm.getPosition() == rest) {
+            if (gamepad2.dpad_right && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && servoArm.getPosition() == rest) {
                 frontLift.setTargetPosition(upperSpecimenBar);
                 backLift.setTargetPosition(upperSpecimenBar);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -259,9 +270,10 @@ public class clawAdaptation extends LinearOpMode {
                 scoreMacroLock = 1;
             }
 
-            // Dpad Down takes the lift to the human player wall
-            if (gamepad2.dpad_down && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0) {
+            // Dpad Left takes the lift to the human player wall
+            if (gamepad2.dpad_left && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0 && scoreMacroLock < 2) {
                 scoreMacroLock = 0;
+                clawclickcount = 0;
                 frontLift.setTargetPosition(wall);
                 backLift.setTargetPosition(wall);
                 frontLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -271,19 +283,24 @@ public class clawAdaptation extends LinearOpMode {
                 armclickcount = 0;
             }
 
+            /*if (frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && frontLift.getPower() == 0){
+                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }*/
 
-            if (gamepad2.dpad_right && frontLift.getCurrentPosition() <= specimenScoringMacro) {
-                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                frontLift.setPower(1);
-                backLift.setPower(1);
-            } else if(gamepad2.dpad_right && frontLift.getCurrentPosition() > specimenScoringMacro) {
-                frontLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                backLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            /*if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && frontLift.getCurrentPosition() <= specimenScoringMacro && scoreMacroLock == 1 && servoClaw.getPosition() == closed) {
+                scoreMacroLock = 2;
                 frontLift.setPower(0);
-                 backLift.setPower(0);
-            }
+                backLift.setPower(0);
+            } else if (scoreMacroLock == 2 && servoClaw.getPosition() == open) {
+                scoreMacroLock = 1;
+            }*/
 
+
+            if (frontLift.getCurrentPosition() > 900 && frontLift.getCurrentPosition() < 1200 && frontLift.getMode() == DcMotor.RunMode.RUN_TO_POSITION && clawclickcount % 2 == 1){
+               clawclickcount = 0;
+            }
 
             if (Math.abs(frontLift.getCurrentPosition()) > robotSlowDown && driveTrainClickCount % 2 == 0) {
                 driveTrainClickCount = driveTrainClickCount + 1;
@@ -304,32 +321,10 @@ public class clawAdaptation extends LinearOpMode {
                 }
             }
             if (clawclickcount % 2 == 1) {
-                servoClawGrab.setPosition(closed);
+                servoClaw.setPosition(open);
             } else if (clawclickcount % 2 == 0) {
-                servoClawGrab.setPosition(open);
+                servoClaw.setPosition(closed);
             }
-
-            if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper && rotation > .2) {
-                    rotation = rotation - .1;
-            }
-
-
-            if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper && rotation < .8) {
-                    rotation = rotation + .1;
-            }
-
-            if (servoArm.getPosition() == rest){
-                rotation = .5;
-            }
-
-            servoClawRotate.setPosition(rotation);
-
-            if (frontLift.getCurrentPosition() < 600 && frontLift.getCurrentPosition() > 500){
-                driveTrainClickCount = 0;
-            }
-
-
-
 
             if (currentGamepad2.x && !previousGamepad2.x) {
                 if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
@@ -338,12 +333,23 @@ public class clawAdaptation extends LinearOpMode {
                     armclickcount = armclickcount + 1;
                 }
             }
-
-            if (armclickcount % 2 == 1 && frontLift.getCurrentPosition() < armLockOut) {
+            if (armclickcount % 2 == 1 && Math.abs(frontLift.getCurrentPosition()) < armLockOut) {
                 servoArm.setPosition(out);
-            }else if (armclickcount % 2 == 0) {
+            }else if (armclickcount % 2 == 0 /*&& frontLift.getCurrentPosition() < 1200*/) {
+                servoArm.setPosition(rest);
+            } /*else {
+                servoArm.setPosition(.65);
+                armclickcount = 0;
+            }*/
+
+           /* if (Math.abs(frontLift.getCurrentPosition()) >= armLockOut) {
                 servoArm.setPosition(rest);
             }
+            // don't know if this is necessary
+            if (Math.abs(frontLift.getCurrentPosition()) < 700 && Math.abs(frontLift.getCurrentPosition()) >= 550) {
+                servoClaw.setPosition(closed);
+            }*/
+
 
             /*if (dsensor.getDistance(DistanceUnit.INCH) < distance) {
 
@@ -358,10 +364,10 @@ public class clawAdaptation extends LinearOpMode {
             } else {
                 telemetry.addData("Centric", "robot");
             }
-            if (servoClawGrab.getPosition() == open) {
-                telemetry.addData("Claw", "closed");
+            if (servoClaw.getPosition() == open) {
+                telemetry.addData("Claw", "Open");
             } else {
-                telemetry.addData("Claw", "open");
+                telemetry.addData("Claw", "closed");
             }
             telemetry.addData("back Lift Pos", backLift.getCurrentPosition());
             telemetry.addData("front Lift Pos", frontLift.getCurrentPosition());
@@ -373,7 +379,7 @@ public class clawAdaptation extends LinearOpMode {
             telemetry.addData("Left Odometry", frontRightMotor.getCurrentPosition());
             telemetry.addData("Right Odometry", frontLeftMotor.getCurrentPosition());
             telemetry.addData("Back Odometry", backRightMotor.getCurrentPosition());
-            telemetry.addData("Claw Position", servoClawGrab.getPosition());
+            telemetry.addData("Claw Position", servoClaw.getPosition());
             telemetry.addData("Arm Position", servoArm.getPosition());
             telemetry.addData("Drive Train Click Count", driveTrainClickCount);
             telemetry.addData("Centric Click Count", centricClickCount);
@@ -389,19 +395,10 @@ public class clawAdaptation extends LinearOpMode {
             telemetry.addData("back Left Motor", backLeftMotor.getPower());
             telemetry.addData("back Right Motor", backRightMotor.getPower());
             telemetry.addData("scoreMacroLock", scoreMacroLock);
-            telemetry.addData("Claw Rotate Position", servoClawRotate.getPosition());
-            telemetry.addData("rotateClickCount", rotateClickCount);
-            telemetry.addData("rotation", rotation);
-            if (servoArm.getPosition() == .7) {
-                telemetry.addData("arm", "Rest");
-            } else if (servoArm.getPosition() == .4) {
-                telemetry.addData("arm", "Out");
-            }
             telemetry.update();
         }
     }
 }
-
 
 
 

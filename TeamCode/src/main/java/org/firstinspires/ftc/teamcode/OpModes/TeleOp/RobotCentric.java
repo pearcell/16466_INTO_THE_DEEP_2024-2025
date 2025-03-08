@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.util.Size;
 import android.view.View;
 import java.util.ArrayList;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -34,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 @TeleOp
+@Disabled
 public class RobotCentric extends LinearOpMode {
     double tgtPower = 0;
 
