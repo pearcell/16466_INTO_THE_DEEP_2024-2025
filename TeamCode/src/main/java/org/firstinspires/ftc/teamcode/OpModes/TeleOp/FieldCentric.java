@@ -77,7 +77,7 @@ public class FieldCentric extends LinearOpMode {
         imu.resetYaw();
         waitForStart();
 
-        double botAdjustment = 90;
+        double botAdjustment = 45;
         double rotation = .5;
         double rotateClickCount = 1;
         final double closed = .5;

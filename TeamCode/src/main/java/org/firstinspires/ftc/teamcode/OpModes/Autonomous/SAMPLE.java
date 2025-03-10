@@ -49,7 +49,7 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 1 score
         TrajectoryActionBuilder score1A = grab1A.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(56.9, 58.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(58.9, 60.2), Math.toRadians(49.3));
 
         //sample 2 grab
         TrajectoryActionBuilder grab2A = score1A.endTrajectory().fresh()
@@ -57,15 +57,15 @@ public class SAMPLE extends LinearOpMode {
 
         //sample 2 score
         TrajectoryActionBuilder score2A = grab2A.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(56.9, 58.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(58.9, 60.2), Math.toRadians(49.3));
 
         //sample 3 grab
         TrajectoryActionBuilder grab3A = score2A.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(55.4, 47), Math.toRadians(-61.0), new AngularVelConstraint(Math.toRadians(220)));
+                .strafeToLinearHeading(new Vector2d(55.4, 47), Math.toRadians(-60.0), new AngularVelConstraint(Math.toRadians(220)));
 
         //sample 3 score
         TrajectoryActionBuilder score3A = grab3A.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(56.9, 58.2), Math.toRadians(49.3));
+                .strafeToLinearHeading(new Vector2d(58.9, 60.2), Math.toRadians(49.3));
 
         //park next to sub for level 1 ascent
         TrajectoryActionBuilder parkA = score3A.endTrajectory().fresh()
@@ -106,7 +106,7 @@ public class SAMPLE extends LinearOpMode {
                 new ParallelAction(
                         new SequentialAction(
                                 //score preload
-                                lift.SetSlidePos(1250),
+                                lift.SetSlidePos(1280),
                                 new SleepAction(.4),
                                 new ParallelAction(
                                         scorePreload,
@@ -126,7 +126,7 @@ public class SAMPLE extends LinearOpMode {
                                         grab1,
                                         new SequentialAction(
                                                 new SleepAction(.5),
-                                                lift.SetSlidePos(60)
+                                                lift.SetSlidePos(70)
                                         ),
                                         new SequentialAction(
                                                 new SleepAction(.6),
@@ -134,13 +134,14 @@ public class SAMPLE extends LinearOpMode {
                                                 swivel.turn(.6)
                                         )
                                 ),
+                                new SleepAction(1),
                                 lift.SetSlidePos(-60),
                                 new SleepAction(.25),
                                 claw.grab(),
                                 new SleepAction(.25),
                                 swivel.turn(.5),
                                 intake.retract(.73),
-                                lift.SetSlidePos(1270),
+                                lift.SetSlidePos(1280),
                                 new SleepAction(.25),
                                 //score 1
                                 score1,
@@ -156,17 +157,18 @@ public class SAMPLE extends LinearOpMode {
                                         ),
                                         new SequentialAction(
                                                 new SleepAction(.6),
-                                                intake.extend(.5),
+                                                intake.extend(.52),
                                                 swivel.turn(.45)
                                         )
                                 ),
+                                new SleepAction(1),
                                 lift.SetSlidePos(-60),
                                 new SleepAction(.25),
                                 claw.grab(),
                                 new SleepAction(.25),
                                 swivel.turn(.5),
                                 intake.retract(.73),
-                                lift.SetSlidePos(1270),
+                                lift.SetSlidePos(1280),
                                 new SleepAction(.4),
                                 //score 2
                                 score2,
@@ -182,17 +184,18 @@ public class SAMPLE extends LinearOpMode {
                                         ),
                                         new SequentialAction(
                                                 new SleepAction(.6),
-                                                intake.extend(.43),
+                                                intake.extend(.45),
                                                 swivel.turn(.4)
                                         )
                                 ),
+                                new SleepAction(1),
                                 lift.SetSlidePos(-60),
                                 new SleepAction(.25),
                                 claw.grab(),
                                 new SleepAction(.25),
                                 swivel.turn(.5),
                                 intake.retract(.73),
-                                lift.SetSlidePos(1270),
+                                lift.SetSlidePos(1280),
                                 new SleepAction(.4),
                                 //score 3
                                 score3,
